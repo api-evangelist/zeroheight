@@ -1,9 +1,9 @@
 aid: zeroheight
-name: zeroheight
+name: Zeroheight
 description: >-
-  The zeroheight REST API can be used to automate your design system workflow,
-  make use of your content in new ways and, leverage external tools to empower
-  your design system.  
+  The zeroheight REST API can be used to automate your design system workflow, make
+  use of your content in new ways and, leverage external tools to empower your design
+  system.
 type: Index
 position: Consumer
 access: 3rd-Party
@@ -17,7 +17,7 @@ url: >-
 specificationVersion: '0.19'
 apis:
   - aid: zeroheight:zeroheight
-    name: zeroheight API
+    name: Zeroheight API
     description: >-
       The zeroheight REST API can be used to automate your design system
       workflow, make use of your content in new ways and leverage external

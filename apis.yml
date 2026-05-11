@@ -53,6 +53,50 @@ common:
     name: zeroheight Blog
     type: Blog
     description: 'null'
+integrations:
+  - name: Frame 1948764683
+  - name: Frame 1948764683 1
+  - name: Frame 1948764683 2
+  - name: Frame 1948764683 3
+  - name: Property 1=Measurmentmenu (1)
+  - name: Icon24x24
+  - name: Icon24x24 2
+  - name: Iconmenu24x24
+  - name: Iconmenu24x24 1
+  - name: Iconmenu24x24 2
+  - name: Iconmenu24x24 3
+  - name: Iconmenu24x24 4
+  - name: Menu Cards (1)
+  - name: Frame 1948764683menu 44x44
+  - name: Frame 1948764683menu 44x44 1
+  - name: Frame 1948764683menu 44x44 2
+  - name: Frame 1948764683menu 44x44 3
+  - name: Frame 1948764683menu 44x44 4
+  - name: Frame 1948764683menu 44x44 5
+  - name: Iconsupport Menu 24x24
+  - name: Iconsupport Menu 24x24 1
+  - name: Iconsupport Menu 24x24 2
+  - name: Iconsupport Menu 24x24 3
+  - name: Slack
+  - name: Design Systems Report 2026
+  - name: Tokens 1 (1)
+  - name: Icon
+  - name: Figma 54x54
+  - name: sketch 54x54
+  - name: Icon 2
+  - name: Github 54x54
+  - name: Gitlab 54x54
+  - name: azure 54x54
+  - name: storybook 54x54
+  - name: bitbucket 54
+  - name: Icon 8
+  - name: Google Analytics
+  - name: Hotjar 54
+  - name: Speech Bubble
+  - name: Slack 54
+  - name: Microsoft Teams 54
+  - name: Automations
+  - name: Zapier 54
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

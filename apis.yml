@@ -33,6 +33,10 @@ apis:
       - type: Guide
         url: https://zeroheight.com/help/api/
 common:
+  - type: GitHubOrganization
+    url: https://github.com/zeroheight
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/zeroheight
   - url: https://zeroheight.com/
     name: zeroheight - The Design System Platform
     type: Website

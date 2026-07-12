@@ -33,6 +33,10 @@ apis:
       - type: Guide
         url: https://zeroheight.com/help/api/
 common:
+  - type: TrustCenter
+    url: security/zeroheight-trust-center.yml
+  - type: DomainSecurity
+    url: security/zeroheight-domain-security.yml
   - type: GitHubOrganization
     url: https://github.com/zeroheight
   - type: LinkedIn

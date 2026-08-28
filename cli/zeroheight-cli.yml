@@ -1,0 +1,88 @@
+specification: API Commons CLI
+specificationVersion: '0.1'
+provider: Zeroheight
+providerId: zeroheight
+generated: '2026-08-28'
+method: searched
+source: >-
+  https://help.zeroheight.com/hc/en-us/articles/35887094424347-Using-the-Adoption-CLI-as-part-a-CI-pipeline ;
+  https://www.npmjs.com/package/@zeroheight/adoption-cli ;
+  https://github.com/zeroheight/action-design-system-adoption
+name: zeroheight Adoption CLI
+package: '@zeroheight/adoption-cli'
+binary: zh-adoption
+version: 4.1.5
+published: '2026-04-01'
+description: >-
+  zeroheight ships one first-party CLI, and it is not a wrapper over the REST API — it is a codebase
+  scanner. The Adoption CLI reads a repository's lock files and source, works out which design system
+  packages and components are actually in use and where colour values are hard-coded instead of
+  tokenised, and pushes that back into zeroheight's Adoption dashboard. Its natural home is CI, and
+  zeroheight publishes a GitHub Action wrapper for exactly that.
+install:
+  - method: npx
+    command: npx @zeroheight/adoption-cli
+  - method: github-action
+    repo: https://github.com/zeroheight/action-design-system-adoption
+    marketplace: true
+authentication:
+  interactive:
+    command: auth
+    note: Not needed when environment variables are set.
+  non_interactive:
+    env:
+      - ZEROHEIGHT_CLIENT_ID
+      - ZEROHEIGHT_ACCESS_TOKEN
+    note: Token should be created with the "Measure Adoption" use case.
+commands:
+  - name: auth
+    group: authentication
+    description: Interactive login. Skipped in CI when the environment variables are set.
+  - name: track-package
+    group: publishing
+    description: Sends the name and version of the design system package to zeroheight. Run inside the design system package itself.
+    flags:
+      - flag: --interactive
+        values: [true, false]
+      - flag: --packages / -p
+        description: Comma-separated package list, for monorepos where only some packages should be tracked.
+    examples:
+      - npx @zeroheight/adoption-cli track-package --interactive false
+      - npx @zeroheight/adoption-cli track-package --interactive false --packages package1,package2
+  - name: monitor-repo
+    group: consumption
+    description: Sends the names and versions of the packages a consuming codebase uses, read from its lock file. Run in each consuming repo.
+    flags:
+      - flag: --dir
+        description: Restrict to a specific lock file / directory.
+    examples:
+      - npx @zeroheight/adoption-cli monitor-repo
+      - npx @zeroheight/adoption-cli monitor-repo --dir ./webApp
+  - name: analyze
+    group: analysis
+    description: Analyses a codebase for design system component usage and for colour values that bypass tokens.
+    flags:
+      - flag: --interactive
+        values: [true, false]
+      - flag: --repo-name / -r
+        description: Display name for the repo in the zeroheight UI.
+      - flag: --ignore
+        description: Glob patterns to exclude.
+      - flag: --extensions
+        description: Glob patterns to include.
+      - flag: --component-usage
+        description: Analyse component usage only.
+      - flag: --color-usage
+        description: Analyse non-token colour usage only.
+    examples:
+      - npx @zeroheight/adoption-cli analyze --interactive false --repo-name "My Repo"
+      - npx @zeroheight/adoption-cli analyze --ignore "**/*.{test,spec}.*"
+      - npx @zeroheight/adoption-cli analyze --extensions "**/*.{js,jsx,ts,tsx}"
+      - npx @zeroheight/adoption-cli analyze --component-usage --interactive false -r "My Repo"
+      - npx @zeroheight/adoption-cli analyze --color-usage --interactive false -r "My Repo"
+plan_gating: Adoption tracking is an Enterprise-plan feature.
+gaps:
+  - No CLI covers the REST API surface. There is no zh command to read a styleguide, fetch a page or set a page status.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

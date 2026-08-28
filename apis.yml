@@ -1,9 +1,13 @@
 aid: zeroheight
 name: Zeroheight
-description: >-
-  The zeroheight REST API can be used to automate your design system workflow, make
-  use of your content in new ways and, leverage external tools to empower your design
-  system.
+description: 'zeroheight is a design system platform where teams document components, patterns, guidelines
+  and design tokens in a styleguide, then deliver that documentation to designers, engineers and AI agents.
+  It exposes two machine surfaces: a small key-authenticated REST API (https://zeroheight.com/open_api/v2)
+  covering styleguides, pages, page content, page statuses, versions, categories and token sets, and a
+  substantially richer Model Context Protocol server, hosted at https://mcp.zeroheight.com/mcp and also
+  shipped as the npm package @zeroheight/mcp-server, which lets a coding or prototyping agent read a team''s
+  design system directly. Design tokens export in W3C DTCG format and through stable per-set Style Dictionary
+  URLs usable as build-pipeline endpoints.'
 type: Index
 accessModel:
   pricing: freemium
@@ -20,103 +24,239 @@ accessModel:
 position: Consumer
 access: 3rd-Party
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/zeroheight.png
-tags: []
+tags:
+- Design Systems
+- Design Tokens
+- Documentation
+- Model Context Protocol
+- Agent Readiness
+- Developer Tools
+- Design
+- Figma
+- Storybook
+- Design Operations
 created: '2025-01-07'
-modified: '2026-03-16'
-url: >-
-  https://raw.githubusercontent.com/api-evangelist/zeroheight/refs/heads/main/apis.yml
+modified: '2026-08-28'
+url: https://raw.githubusercontent.com/api-evangelist/zeroheight/refs/heads/main/apis.yml
 specificationVersion: '0.23'
 apis:
-  - aid: zeroheight:zeroheight
-    name: Zeroheight API
-    description: >-
-      The zeroheight REST API can be used to automate your design system
-      workflow, make use of your content in new ways and leverage external
-      tools to empower your design system. It provides access to resources
-      like pages and styleguides using standard HTTP verbs.
-    humanURL: https://developers.zeroheight.com/
-    tags:
-      - Design System
-      - Documentation
-      - REST
-    properties:
-      - type: Documentation
-        url: https://developers.zeroheight.com/
-      - type: Guide
-        url: https://zeroheight.com/help/api/
+- aid: zeroheight:zeroheight
+  name: Zeroheight API
+  description: 'The zeroheight REST API automates design system workflows: read styleguides, their categories,
+    pages and page content (Markdown available via ?format=markdown), read published styleguide versions
+    and design token sets, and write page status tags. Authentication is a paired Client ID and Access
+    Token sent as the X-API-CLIENT and X-API-KEY headers. Rate limited to 30 requests per 30 seconds per
+    key. API access is an Enterprise-plan feature.'
+  humanURL: https://developers.zeroheight.com/
+  tags:
+  - Design System
+  - Design Tokens
+  - Documentation
+  - REST
+  - Styleguides
+  - Pages
+  properties:
+  - type: OpenAPI
+    url: openapi/zeroheight-open-api-v2.yml
+  - type: Overlay
+    url: overlays/zeroheight-open-api-v2-overlay.yaml
+  - type: Documentation
+    url: https://developers.zeroheight.com/
+  - type: APIReference
+    url: https://developers.zeroheight.com/75fe5b2ed/p/02b002
+  - type: GettingStarted
+    url: https://developers.zeroheight.com/75fe5b2ed/p/877703-getting-started
+  - type: Guide
+    url: https://zeroheight.com/help/api/
+  - type: Postman
+    url: https://www.postman.com/zeroheight-0379/zeroheight/overview
+  - type: Authentication
+    url: authentication/zeroheight-authentication.yml
+  - type: OAuthScopes
+    url: scopes/zeroheight-scopes.yml
+  - type: ErrorCatalog
+    url: errors/zeroheight-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/zeroheight-rate-limits.yml
+  - type: Conventions
+    url: conventions/zeroheight-conventions.yml
+  - type: DataModel
+    url: data-model/zeroheight-data-model.yml
+  - type: Conformance
+    url: conformance/zeroheight-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/zeroheight-lifecycle.yml
+  baseURL: https://zeroheight.com/open_api/v2
+- aid: zeroheight:zeroheight-mcp
+  name: zeroheight MCP
+  description: The zeroheight Model Context Protocol server. Gives AI tools read access to a team's design
+    system documentation - list styleguides, walk the navigation tree, full-text search pages (Enterprise),
+    fetch page Markdown and fetch page assets - plus a closed-beta write surface that creates pages and
+    resolves Figma, Storybook, git and token references. Deployed both as a hosted remote endpoint at
+    https://mcp.zeroheight.com/mcp (OAuth browser login, SSO supported) and as a local stdio server published
+    on npm as @zeroheight/mcp-server. Available on every plan, capped at 500 calls per month on Free and
+    Starter.
+  humanURL: https://help.zeroheight.com/hc/en-us/articles/48004395674011-zeroheight-MCP-overview
+  baseURL: https://mcp.zeroheight.com/mcp
+  tags:
+  - Model Context Protocol
+  - Agents
+  - Design Systems
+  - AI
+  properties:
+  - type: MCPServer
+    url: mcp/zeroheight-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/zeroheight-tool-crosswalk.yml
+  - type: Documentation
+    url: https://help.zeroheight.com/hc/en-us/articles/51478956166939-zeroheight-MCP-tools-reference
+  - type: GettingStarted
+    url: https://help.zeroheight.com/hc/en-us/articles/43780251357979-Using-the-remote-zeroheight-MCP-server
 common:
-  - type: TrustCenter
-    url: security/zeroheight-trust-center.yml
-  - type: DomainSecurity
-    url: security/zeroheight-domain-security.yml
-  - type: GitHubOrganization
-    url: https://github.com/zeroheight
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/zeroheight
-  - url: https://zeroheight.com/
-    name: zeroheight - The Design System Platform
-    type: Website
-    description: 'null'
-  - url: https://developers.zeroheight.com/
-    name: zeroheight API Documentation
-    type: Portal
-    description: 'null'
-  - url: https://help.zeroheight.com/
-    name: zeroheight Help Center
-    type: Support
-    description: 'null'
-  - url: https://zeroheight.com/integrations/
-    name: zeroheight Integrations Hub
-    type: Integrations
-    description: 'null'
-  - url: https://zeroheight.com/blog/
-    name: zeroheight Blog
-    type: Blog
-    description: 'null'
+- type: TrustCenter
+  url: security/zeroheight-trust-center.yml
+- type: DomainSecurity
+  url: security/zeroheight-domain-security.yml
+- type: GitHubOrganization
+  url: https://github.com/zeroheight
+- type: LinkedIn
+  url: https://www.linkedin.com/company/zeroheight
+- url: https://zeroheight.com/
+  name: zeroheight - The Design System Platform
+  type: Website
+  description: 'null'
+- url: https://developers.zeroheight.com/
+  name: zeroheight API Documentation
+  type: Portal
+  description: 'null'
+- url: https://help.zeroheight.com/
+  name: zeroheight Help Center
+  type: Support
+  description: 'null'
+- url: https://zeroheight.com/integrations/
+  name: zeroheight Integrations Hub
+  type: Integrations
+  description: 'null'
+- url: https://zeroheight.com/blog/
+  name: zeroheight Blog
+  type: Blog
+  description: 'null'
+- type: MCPServer
+  url: mcp/zeroheight-mcp.yml
+  name: zeroheight MCP server manifest
+- type: ToolCrosswalk
+  url: mcp/zeroheight-tool-crosswalk.yml
+  name: MCP tool to REST operation crosswalk
+- type: Packages
+  url: packages/zeroheight-packages.yml
+  name: First-party npm packages
+- type: SDKs
+  url: packages/zeroheight-packages.yml
+  name: First-party client libraries and tooling
+- type: CLI
+  url: cli/zeroheight-cli.yml
+  name: zeroheight Adoption CLI
+- type: Components
+  url: components/zeroheight-components.yml
+  name: Embeddable and editor component surfaces
+- type: AgentSkill
+  url: skills/_index.yml
+  name: Packaged agent skills for the zeroheight surfaces
+- type: LLMsTxt
+  url: llms/zeroheight-llms.txt
+  name: Agent-readable summary of the zeroheight surfaces
+- type: Authentication
+  url: authentication/zeroheight-authentication.yml
+  name: Authentication profile
+- type: OAuthScopes
+  url: scopes/zeroheight-scopes.yml
+  name: Token use cases and access levels
+- type: ErrorCatalog
+  url: errors/zeroheight-problem-types.yml
+  name: Observed error envelope and problem types
+- type: RateLimits
+  url: rate-limits/zeroheight-rate-limits.yml
+  name: Published rate limits
+- type: Plans
+  url: plans/zeroheight-plans-pricing.yml
+  name: Published plans and pricing
+- type: Conventions
+  url: conventions/zeroheight-conventions.yml
+  name: Cross-cutting runtime semantics
+- type: DataModel
+  url: data-model/zeroheight-data-model.yml
+  name: Entity relationship graph
+- type: Conformance
+  url: conformance/zeroheight-conformance.yml
+  name: Standards conformance including design-token standards
+- type: Compliance
+  url: security/zeroheight-trust-center.yml
+  name: SOC 2 and ISO 27001, published on the trust center
+- type: Lifecycle
+  url: lifecycle/zeroheight-lifecycle.yml
+  name: Versioning, deprecation, status and release posture
+- type: StatusPage
+  url: https://uptime.zeroheight.com/
+  name: zeroheight status page
+- type: ChangeLog
+  url: https://zeroheight.com/whats-new/
+  name: zeroheight What's New
+- type: Overlay
+  url: overlays/zeroheight-open-api-v2-overlay.yaml
+  name: API Evangelist enhancements overlay
+- type: OpenAPI
+  url: openapi/zeroheight-open-api-v2.yml
+  name: Derived OpenAPI 3.1 for the zeroheight REST API
+- type: Postman
+  url: https://www.postman.com/zeroheight-0379/zeroheight/overview
+  name: Public Postman workspace
+- type: Documentation
+  url: https://developers.zeroheight.com/
+  name: zeroheight API documentation
+- type: APIReference
+  url: https://developers.zeroheight.com/75fe5b2ed/p/02b002
+  name: Endpoints reference
+- type: GettingStarted
+  url: https://developers.zeroheight.com/75fe5b2ed/p/877703-getting-started
+  name: Getting started with the zeroheight API
+- type: Pricing
+  url: https://zeroheight.com/pricing/
+  name: zeroheight pricing
+- type: SignUp
+  url: https://zeroheight.com/create/account
+  name: Create a zeroheight account
+- type: Login
+  url: https://zeroheight.com/login
+  name: Sign in to zeroheight
+- type: TermsOfService
+  url: https://terms.zeroheight.com/18bfef5dc/p/24f1a8-website-terms
+  name: Website terms
+- type: PrivacyPolicy
+  url: https://terms.zeroheight.com/18bfef5dc/p/28f2cf-privacy-and-cookie-policy
+  name: Privacy and cookie policy
+- type: HelpCenter
+  url: https://help.zeroheight.com/
+  name: zeroheight Help Center
 integrations:
-  - name: Frame 1948764683
-  - name: Frame 1948764683 1
-  - name: Frame 1948764683 2
-  - name: Frame 1948764683 3
-  - name: Property 1=Measurmentmenu (1)
-  - name: Icon24x24
-  - name: Icon24x24 2
-  - name: Iconmenu24x24
-  - name: Iconmenu24x24 1
-  - name: Iconmenu24x24 2
-  - name: Iconmenu24x24 3
-  - name: Iconmenu24x24 4
-  - name: Menu Cards (1)
-  - name: Frame 1948764683menu 44x44
-  - name: Frame 1948764683menu 44x44 1
-  - name: Frame 1948764683menu 44x44 2
-  - name: Frame 1948764683menu 44x44 3
-  - name: Frame 1948764683menu 44x44 4
-  - name: Frame 1948764683menu 44x44 5
-  - name: Iconsupport Menu 24x24
-  - name: Iconsupport Menu 24x24 1
-  - name: Iconsupport Menu 24x24 2
-  - name: Iconsupport Menu 24x24 3
-  - name: Slack
-  - name: Design Systems Report 2026
-  - name: Tokens 1 (1)
-  - name: Icon
-  - name: Figma 54x54
-  - name: sketch 54x54
-  - name: Icon 2
-  - name: Github 54x54
-  - name: Gitlab 54x54
-  - name: azure 54x54
-  - name: storybook 54x54
-  - name: bitbucket 54
-  - name: Icon 8
-  - name: Google Analytics
-  - name: Hotjar 54
-  - name: Speech Bubble
-  - name: Slack 54
-  - name: Microsoft Teams 54
-  - name: Automations
-  - name: Zapier 54
+- name: Figma
+- name: Sketch
+- name: GitHub
+- name: GitLab
+- name: Azure DevOps
+- name: Storybook
+- name: Bitbucket
+- name: Google Analytics
+- name: Hotjar
+- name: Slack
+- name: Microsoft Teams
+- name: Zapier
+- name: Tokens Studio
+- name: Style Dictionary
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-08-28'
+  status: enriched
+  artifacts_added: 22
+  pass: local-v1

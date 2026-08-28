@@ -1,0 +1,96 @@
+specification: API Commons Error Catalog
+specificationVersion: '0.1'
+provider: Zeroheight
+providerId: zeroheight
+generated: '2026-08-28'
+method: probed
+source: >-
+  live unauthenticated probes of https://zeroheight.com/open_api/v2 on 2026-08-28 ;
+  postman/zeroheight-api.postman_collection.json ;
+  openapi/zeroheight-open-api-v2.yml
+format: custom-envelope
+rfc9457: false
+description: >-
+  zeroheight does not use RFC 9457 problem+json. It returns a consistent custom JSON envelope on
+  every error, with a machine-usable correlation id on every single response. The envelope below was
+  observed verbatim on live probes, not transcribed from documentation — zeroheight publishes no
+  error reference. There is no error CODE registry: the only discriminators are the HTTP status and
+  a short human-readable `message`, which means an agent cannot branch on a stable symbol.
+envelope:
+  content_type: application/json
+  shape:
+    status: '"fail" for client authentication/validation failures, "error" for routing and server failures'
+    message: short human-readable reason
+    data:
+      request_id: 32-character hex correlation id, present on every error observed
+  example_unauthorized:
+    status: fail
+    message: Unauthorized
+    data:
+      request_id: f9510eb94423d255c30947c718bf58e0
+  example_not_found:
+    status: error
+    message: Not Found
+    data:
+      request_id: 7f86f819024dc13e2fa52484928fb481
+problem_types:
+  - id: unauthorized
+    http_status: 401
+    status_field: fail
+    message: Unauthorized
+    title: Missing, malformed or invalid credentials
+    detail: >-
+      The X-API-CLIENT (Client ID) or X-API-KEY (Access Token) header is absent, malformed or
+      invalid. Also returned when the account's plan does not include API access.
+    remediation: >-
+      Create a token in the Developers section of organization or workspace settings, send both
+      headers, and confirm the plan includes API access (Enterprise only).
+    observed: true
+    observed_on: GET /styleguides, GET /pages, GET /pages/1, PATCH /pages/1/status, GET /token_sets
+  - id: not-found
+    http_status: 404
+    status_field: error
+    message: Not Found
+    title: Path not routed, or resource does not exist
+    detail: >-
+      Returned both for an unrouted path and for a routed path whose resource is absent. The two
+      cases are not distinguishable from the response, which is the sharpest usability gap in the
+      error model.
+    remediation: Check the path against the documented endpoint list and the resource identifier.
+    observed: true
+    observed_on: GET /styleguides/1, GET /categories, POST /pages, DELETE /pages/1
+  - id: rate-limited
+    http_status: 429
+    status_field: fail
+    title: Rate limit exceeded
+    detail: More than 30 requests were made against one API key in a 30-second window.
+    remediation: >-
+      Back off using X-RateLimit-Reset (UTC epoch seconds). No Retry-After header is published, so a
+      client must compute its own wait from the reset timestamp.
+    observed: false
+    source: zeroheight public Postman collection, "Rate and usage limits"
+mcp_errors:
+  - id: invalid_token
+    surface: https://mcp.zeroheight.com/mcp
+    http_status: 401
+    body: '{"error":"invalid_token","error_description":"Missing Authorization header"}'
+    detail: OAuth-shaped error on the MCP surface — a different envelope from the REST API's.
+    observed: true
+    observed_on: '2026-08-28'
+  - id: mcp-resource-not-found
+    surface: https://mcp.zeroheight.com/sse
+    http_status: 404
+    body: '{"jsonrpc":"2.0","error":{"code":-32601,"message":"Resource not found."},"id":null}'
+    detail: JSON-RPC error for an unserved MCP transport path.
+    observed: true
+gaps:
+  - No error code registry. Two messages ("Unauthorized", "Not Found") carry the entire REST error vocabulary.
+  - No RFC 9457 application/problem+json.
+  - 404 conflates "route does not exist" with "resource does not exist".
+  - No documented 4xx for validation failures on PATCH /pages/{page_id}/status.
+  - Three distinct error envelopes across the estate: REST custom, MCP OAuth, MCP JSON-RPC.
+strengths:
+  - Every REST error carries data.request_id, so any failure is quotable to support without a reproduction.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

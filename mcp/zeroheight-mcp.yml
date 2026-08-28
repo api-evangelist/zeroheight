@@ -1,0 +1,144 @@
+specification: API Commons MCP Server
+specificationVersion: '0.1'
+provider: Zeroheight
+providerId: zeroheight
+generated: '2026-08-28'
+method: searched
+source: >-
+  https://help.zeroheight.com/hc/en-us/articles/48004395674011-zeroheight-MCP-overview ;
+  https://help.zeroheight.com/hc/en-us/articles/51478956166939-zeroheight-MCP-tools-reference ;
+  https://help.zeroheight.com/hc/en-us/articles/43780251357979-Using-the-remote-zeroheight-MCP-server ;
+  https://help.zeroheight.com/hc/en-us/articles/39914754674843-Set-up-the-local-MCP-server ;
+  https://www.npmjs.com/package/@zeroheight/mcp-server ;
+  live POST tools/list probe of https://mcp.zeroheight.com/mcp on 2026-08-28
+name: zeroheight MCP
+description: >-
+  zeroheight ships a genuine dual-deployment MCP server: a hosted remote endpoint at
+  https://mcp.zeroheight.com/mcp that any MCP client can reach after an OAuth login, and a local
+  stdio server distributed on npm as @zeroheight/mcp-server. Both expose the same read tools over a
+  team's design system documentation — list styleguides, walk the navigation tree, search pages,
+  fetch page markdown and fetch page assets — so a coding or prototyping agent can ground its output
+  in the design system instead of being pasted the guidelines. A closed-beta write surface adds
+  page creation and the reference-resolution tools a rich page needs.
+deployment:
+  mode: both
+  endpoint: https://mcp.zeroheight.com/mcp
+  install: npx -y @zeroheight/mcp-server@latest
+  package: https://www.npmjs.com/package/@zeroheight/mcp-server
+  auth: oauth
+  verified: probed
+x-evidence:
+  - probe: POST https://mcp.zeroheight.com/mcp {"jsonrpc":"2.0","id":1,"method":"tools/list"}
+    fetched: '2026-08-28'
+    http_status: 401
+    body: '{"error":"invalid_token","error_description":"Missing Authorization header"}'
+    reading: >-
+      The remote server is live and reachable but authorization-gated, so the live tool schemas
+      (inputSchema per tool) could not be introspected anonymously. The tool list below is
+      zeroheight's own published reference, names and descriptions only. Input schemas require an
+      authenticated tools/list call.
+  - probe: POST https://mcp.zeroheight.com/sse
+    fetched: '2026-08-28'
+    http_status: 404
+    reading: Only the streamable-HTTP /mcp path is served; there is no legacy SSE transport endpoint.
+  - probe: GET https://mcp.zeroheight.com/.well-known/oauth-authorization-server
+    fetched: '2026-08-28'
+    http_status: 404
+    reading: >-
+      The OAuth flow is not anonymously discoverable — neither RFC 8414 authorization-server metadata
+      nor RFC 9728 protected-resource metadata is served. This is the single largest gap in an
+      otherwise strong agent surface.
+transports:
+  - name: streamable-http
+    url: https://mcp.zeroheight.com/mcp
+    status: live
+    auth: OAuth browser login against the team's zeroheight account (username/password or SSO), or a per-viewer unique URL ("MCP via link") that carries its own credential.
+  - name: stdio
+    package: '@zeroheight/mcp-server'
+    status: live
+    auth: >-
+      Browser OAuth on first use, tokens cached at ~/.zeroheight/mcp-oauth.json; or
+      ZEROHEIGHT_CLIENT_ID + ZEROHEIGHT_ACCESS_TOKEN environment variables, forwarded to zeroheight
+      as X-API-CLIENT and X-API-KEY.
+access_modes:
+  - name: MCP via login
+    description: Admins/editors and SSO viewers authenticate with their zeroheight account. Private pages ARE readable. The only mode that unlocks the write tools.
+    endpoint: https://mcp.zeroheight.com/mcp
+    plans: not available on Free or Starter
+  - name: MCP via link
+    description: A per-viewer unique URL for viewers who do not sign in via SSO. Scoped to a single styleguide, so list-styleguides is not exposed and list-pages needs no styleguideId. Private pages are NOT readable.
+    plans: all plans
+  - name: Local MCP
+    description: The stdio npm server, for organisations that block remote MCP or need token auth in CI/CD. Private pages ARE readable.
+    plans: all plans
+tools:
+  read:
+    - name: list-styleguides
+      description: Discovers all zeroheight styleguides accessible via the connected MCP. Returns styleguide IDs and names. Typically the first call an agent makes. Not exposed for single-styleguide (MCP via link) connections.
+    - name: search-pages
+      description: Searches the styleguide for pages matching a keyword or topic and returns relevant chunks. Can target a specific release.
+      availability: Enterprise plans with AI features enabled ("fast search"). Not available on Free or Starter.
+    - name: list-pages
+      description: Returns the full navigation tree for a styleguide — sections, categories, pages and tabs. Can target a specific release.
+    - name: get-page
+      description: Fetches a page's content as Markdown, including usage notes, guidance and embedded assets. Can target a specific release. Gains a `format` property when write access is available, to return editor XML instead of reading format.
+    - name: get-page-asset
+      description: Fetches images or file attachments referenced in a get-page response. Accepts multiple URIs in one call. Returns the source URL when an asset cannot be parsed.
+    - name: list-releases
+      description: Lists available releases for a styleguide. Called only when the user explicitly asks for a specific release.
+  write:
+    status: closed-beta
+    availability: admins and editors connected via MCP via login only. Not available via MCP via link or local MCP.
+    source: https://help.zeroheight.com/hc/en-us/articles/54955157637659-Writing-to-zeroheight-via-MCP
+    tools:
+      - name: create-page
+        description: Creates a page in a category with content and an optional hidden flag. Returns the page's ID, URL and version. Pages can only be created in the current work-in-progress release.
+      - name: upload-asset
+        description: Uploads an image or downloadable attachment and returns the path page content must use to reference it.
+      - name: list-design-libraries
+        description: Lists design libraries whose designs can be placed on a page, and reports whether Figma is still connected.
+      - name: get-designs
+        description: Lists one library's designs, filterable by source node ID, kind or name.
+      - name: list-component-sets
+        description: Finds component sets a component-set block can reference.
+      - name: get-component-set
+        description: Returns the component and field IDs a component-set block accepts.
+      - name: list-token-sets
+        description: Lists token sets available for token mentions and token management blocks.
+      - name: list-tokens
+        description: Lists the tokens in a token set.
+      - name: list-repositories
+        description: Finds connected git repositories.
+      - name: get-repository
+        description: Lists the markdown files in a repository's last-synced tree. A repository that has never synced cannot be read.
+      - name: create-markdown-snapshot
+        description: Snapshots one markdown file from a connected repository for embedding.
+      - name: get-storybooks
+        description: Lists Storybook links attached to the styleguide.
+      - name: get-stories
+        description: Lists the stories in a Storybook. VPN-restricted Storybooks cannot be reached.
+      - name: get-livecode-settings
+        description: Returns the npm packages and shared resources a styleguide's livecode previews run against.
+      - name: read-resource
+        description: Reads this server's MCP resources (the editor XML guide and livecode templates) for clients that cannot read MCP resources directly.
+resources:
+  - uri: zeroheight://editor-instructions
+    description: Documents every element of zeroheight's editor XML page-content format. Required reading for an agent before it calls create-page.
+usage_limits:
+  - scope: Free and Starter plans
+    limit: 500 MCP calls per month
+    note: The fast search tool (search-pages) is not included on Free or Starter.
+  - scope: Enterprise
+    limit: higher limits, plus MCP server with Fast Search
+partner_connectors:
+  - name: Figma / Figma Make
+    note: Connects through the same "Access via login" styleguide setting; disabling that setting blocks the partner connector too.
+  - name: ChatGPT
+    note: zeroheight publishes a direct ChatGPT partner connector link.
+security_notes:
+  - Styleguide-level security (password protection, SSO restriction) has NO effect on MCP reachability — a restricted styleguide is as reachable via MCP as a public one.
+  - Page-level privacy does apply, and differs by mode - private pages are readable via login and via local MCP, and are not readable via link.
+  - Remote MCP URLs can be revoked in bulk with "Disconnect all current MCP sessions"; disabling remote MCP immediately stops all existing URLs returning data.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

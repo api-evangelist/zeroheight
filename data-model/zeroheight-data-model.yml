@@ -1,0 +1,128 @@
+specification: API Commons Data Model
+specificationVersion: '0.1'
+provider: Zeroheight
+providerId: zeroheight
+generated: '2026-08-28'
+method: derived
+source: >-
+  openapi/zeroheight-open-api-v2.yml (path structure) ;
+  https://help.zeroheight.com/hc/en-us/articles/51478956166939-zeroheight-MCP-tools-reference ;
+  https://help.zeroheight.com/hc/en-us/articles/35887062307355-Automate-zeroheight-with-Zapier ;
+  https://help.zeroheight.com/hc/en-us/articles/35886917772699-Page-status-tags
+description: >-
+  The zeroheight entity graph, derived from route structure, MCP tool semantics and the field lists
+  zeroheight publishes for its Zapier triggers. Response schemas are behind authentication and
+  zeroheight publishes none, so attributes are recorded only where zeroheight names them itself;
+  nothing has been inferred into a field list.
+root: Styleguide
+entities:
+  - name: Styleguide
+    description: A design system documented in zeroheight. The top-level container and the unit of MCP access control.
+    identifiers:
+      - name: styleguide_id
+        named_in: [REST path, Zapier trigger fields, MCP tool arguments]
+    attributes_named_by_provider: [Styleguide ID, Styleguide Name]
+    relationships:
+      - type: has_many
+        target: Category
+        via: /styleguides/{styleguide_id}/categories
+      - type: has_many
+        target: Page
+        via: /styleguides/{styleguide_id}/pages
+      - type: has_many
+        target: Version
+        via: /styleguides/{styleguide_id}/versions
+      - type: has_many
+        target: Storybook
+        via: MCP get-storybooks
+      - type: has_many
+        target: DesignLibrary
+        via: MCP list-design-libraries
+  - name: Category
+    description: The grouping layer of a styleguide's navigation, above pages. A category ID is the required target when creating a page.
+    relationships:
+      - type: belongs_to
+        target: Styleguide
+      - type: has_many
+        target: Page
+  - name: Page
+    description: A documentation page. Carries content (Markdown over the API, editor XML in write mode), an optional status tag, tabs and assets.
+    identifiers:
+      - name: page_id
+    attributes_named_by_provider: [Page ID, Page Name]
+    relationships:
+      - type: belongs_to
+        target: Category
+      - type: belongs_to
+        target: Styleguide
+      - type: has_one
+        target: PageStatus
+        via: /pages/{page_id}/status
+      - type: has_many
+        target: PageAsset
+        via: MCP get-page-asset
+  - name: PageStatus
+    description: >-
+      The status tag on a page. Up to 7 statuses exist across all plans; labels and colours are
+      customisable per styleguide, and statuses cannot be deleted, only edited. zeroheight's default
+      set is New, Ready, In progress, To do, Deprecated, BETA, N/A.
+    attributes_named_by_provider: [Old Status, New Status]
+    write_surface: PATCH /pages/{page_id}/status
+    relationships:
+      - type: belongs_to
+        target: Page
+  - name: PageAsset
+    description: Images and file attachments referenced by page content. Fetched by URI; non-image types are unreliable for agents.
+    relationships:
+      - type: belongs_to
+        target: Page
+  - name: Version
+    description: >-
+      A published release of a styleguide. Called a Version on the REST surface and a Release on the
+      MCP surface; the same thing. Pages can only be created in the current work-in-progress release.
+    identifiers:
+      - name: Styleguide Version ID
+    attributes_named_by_provider: [Styleguide Version ID, Release Name, Release Date, Created At, Release URL, Release Notes, Project ID]
+    relationships:
+      - type: belongs_to
+        target: Styleguide
+  - name: TokenSet
+    description: A set of design tokens. Exportable as W3C DTCG JSON or via a per-set Style Dictionary URL (public or private).
+    relationships:
+      - type: has_many
+        target: Token
+        via: MCP list-tokens
+      - type: belongs_to
+        target: Styleguide
+        note: Token sets are also managed account-wide from the top-level Tokens section, so the styleguide link is a usage relationship rather than strict ownership.
+  - name: Token
+    description: An individual design token inside a set. Composite tokens are not supported by platform-specific exports.
+    relationships:
+      - type: belongs_to
+        target: TokenSet
+  - name: ComponentSet
+    description: A set of components with fields, referenced by component-set blocks and summarised in component status tables.
+    relationships:
+      - type: belongs_to
+        target: Styleguide
+  - name: DesignLibrary
+    description: A connected Figma library whose designs can be placed on a page.
+    relationships:
+      - type: has_many
+        target: Design
+  - name: Repository
+    description: A connected git repository whose last-synced markdown tree can be snapshotted into a page.
+  - name: Storybook
+    description: A connected Storybook and its stories, embeddable into a page.
+id_semantics:
+  note: >-
+    zeroheight publishes no id prefix scheme for its resources. The only prefixed identifiers it
+    documents are credentials — zhci_ for a Client ID and zhat_ for an Access Token.
+rest_vs_mcp:
+  note: >-
+    The REST API reaches Styleguide, Category, Page, PageStatus, Version and TokenSet. Token,
+    ComponentSet, DesignLibrary, Repository, Storybook and PageAsset are reachable only over MCP.
+  see: mcp/zeroheight-tool-crosswalk.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

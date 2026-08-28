@@ -1,0 +1,120 @@
+specification: API Commons Tool Crosswalk
+specificationVersion: '0.1'
+provider: Zeroheight
+providerId: zeroheight
+generated: '2026-08-28'
+method: derived
+source: >-
+  mcp/zeroheight-mcp.yml (tool names + descriptions from zeroheight's published MCP tools reference)
+  bound against openapi/zeroheight-open-api-v2.yml operationIds
+description: >-
+  Binds each zeroheight MCP tool to the REST operation(s) that back it. The two surfaces are NOT the
+  same product: the MCP server is the richer of the two and the REST API is the older one. MCP adds
+  full-text search, asset fetch, release-scoped reads and an entire closed-beta authoring surface
+  that has no REST equivalent; REST retains the page-status write that MCP does not expose. Mapping
+  confidence is capped at medium wherever the binding rests on tool descriptions rather than an
+  observed schema, because the live MCP tools/list is OAuth-gated (HTTP 401) and zeroheight publishes
+  no OpenAPI to compare against.
+surfaces:
+  openapi:
+    file: openapi/zeroheight-open-api-v2.yml
+    base: https://zeroheight.com/open_api/v2
+    gated: true
+    note: Derived by API Evangelist from zeroheight's public Postman collection plus live 401/404 route probes. Requires X-API-CLIENT + X-API-KEY. API access is an Enterprise-plan feature.
+  mcp:
+    url: https://mcp.zeroheight.com/mcp
+    gated: true
+    note: Live; POST tools/list returns 401 invalid_token, so per-tool inputSchema could not be introspected anonymously.
+  graphql: null
+crosswalk:
+  - tool: list-styleguides
+    category: discovery
+    rest: [listStyleguides]
+    binding: one-to-one
+    confidence: high
+    note: Both return the set of styleguides the caller's credential can read. MCP scopes by the connected account or link; REST scopes by the token.
+  - tool: list-pages
+    category: navigation
+    rest: [listStyleguidePages, listStyleguideCategories]
+    binding: composite
+    confidence: medium
+    note: >-
+      The MCP tool returns one navigation tree of sections, categories, pages and tabs. Over REST an
+      agent assembles the same view from two calls, and REST exposes no tab layer.
+  - tool: get-page
+    category: content
+    rest: [getPage]
+    binding: one-to-one
+    confidence: high
+    note: >-
+      Closest match in the set. REST getPage takes ?format=markdown; the MCP tool returns Markdown by
+      default and gains a `format` property that can return zeroheight editor XML when write access
+      is granted — a format REST does not offer.
+  - tool: list-releases
+    category: versioning
+    rest: [listStyleguideVersions]
+    binding: one-to-one
+    confidence: medium
+    note: Both enumerate a styleguide's published releases/versions. Naming differs (release vs version).
+mcp_only:
+  - tool: search-pages
+    reason: No REST search operation exists. /open_api/v2 exposes no query, filter or search parameter on any route; an agent over REST must list and fetch pages itself.
+  - tool: get-page-asset
+    reason: No REST asset endpoint. Images and attachments referenced by page content have no REST fetch route.
+  - tool: create-page
+    reason: Closed-beta MCP write surface. REST has no page-creation operation — POST /pages returns 404.
+  - tool: upload-asset
+    reason: No REST upload route.
+  - tool: list-design-libraries
+    reason: Figma design-library surface is MCP-only; no REST equivalent.
+  - tool: get-designs
+    reason: MCP-only.
+  - tool: list-component-sets
+    reason: MCP-only. GET /open_api/v2/component_sets returns 404.
+  - tool: get-component-set
+    reason: MCP-only.
+  - tool: list-token-sets
+    reason: >-
+      Partially overlaps REST listTokenSets (GET /token_sets, confirmed live), but the MCP tool is
+      scoped to a styleguide for token mentions and token tables, which the REST route is not.
+      Recorded here rather than in crosswalk[] because the scoping differs materially.
+  - tool: list-tokens
+    reason: No REST route enumerates the tokens inside a set; GET /token_sets/{id}/tokens returns 404. The comparable REST-side surface is the per-set Style Dictionary export URL, which is not part of open_api/v2.
+  - tool: list-repositories
+    reason: MCP-only git-integration surface.
+  - tool: get-repository
+    reason: MCP-only.
+  - tool: create-markdown-snapshot
+    reason: MCP-only.
+  - tool: get-storybooks
+    reason: MCP-only.
+  - tool: get-stories
+    reason: MCP-only.
+  - tool: get-livecode-settings
+    reason: MCP-only.
+  - tool: read-resource
+    reason: MCP protocol affordance (reads zeroheight://editor-instructions) with no HTTP analogue.
+rest_only:
+  - operationId: listPages
+    reason: MCP always enters through a styleguide; there is no cross-styleguide flat page list tool.
+  - operationId: getPageStatus
+    reason: No MCP tool reads a page's status tag.
+  - operationId: updatePageStatus
+    reason: >-
+      The REST API's only write operation, and it has no MCP equivalent. An agent that needs to move a
+      page from "In progress" to "Ready" must call REST (or Zapier), not MCP.
+  - operationId: listStyleguideCategories
+    reason: Folded into the MCP list-pages navigation tree rather than exposed on its own.
+coverage:
+  mcp_tools_total: 21
+  rest_operations_total: 9
+  mapped_tools: 4
+  mcp_only_tools: 17
+  rest_only_operations: 4
+  note: >-
+    Only 4 of 21 MCP tools have a REST backing operation. zeroheight's agent surface is not a
+    projection of its REST API — it is a separate, larger product, and an integrator choosing REST
+    gets roughly a fifth of what an agent gets.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

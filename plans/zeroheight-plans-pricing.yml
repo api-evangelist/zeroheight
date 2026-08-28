@@ -4,136 +4,100 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Zeroheight
 providerId: zeroheight
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-tags: []
-description: Machine-readable plans and pricing scaffold for this API provider. Conforms to the API Commons
-  Plans schema. Tier limits and prices are scaffold defaults; replace with provider-published values.
+modified: '2026-08-28'
+generated: '2026-08-28'
+method: searched
+source: https://zeroheight.com/pricing/
+tags:
+  - Pricing
+  - Plans
+  - Design Systems
+description: >-
+  zeroheight's published plans, read from the pricing page on 2026-08-28. Replaces a 2026-05-04
+  scaffold whose Free/Professional/Enterprise quotas were invented. zeroheight prices per editor per
+  month; viewers are not charged separately on the published tiers. The API and MCP facts matter
+  most here: MCP is on every plan (capped at 500 calls/month on Free and Starter), while REST API
+  access is Enterprise-only.
+currency: USD
+billing_note: Prices exclude sales tax. Yearly billing saves 15%.
+plan_count: 3
 plans:
   - id: zeroheight-free
     name: Free
-    type: freemium
-    description: Free entry tier for the Zeroheight API surface. Intended for evaluation, prototyping,
-      and low-volume integrations. Real limits and pricing must be reconciled with the provider's published
-      plan documentation.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota across all included endpoints
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 1000
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the free tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 10
-        timeFrame: minute
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
+    type: free
+    price: '0'
+    currency: USD
+    period: month
+    unit: editor
+    seats: 1 editor
     elements:
-      - name: Public Documentation
-      - name: Community Support
-      - name: Sandbox Access
-      - name: Zeroheight API
-  - id: zeroheight-pro
-    name: Professional
+      - name: 1 styleguide
+      - name: 1 token set
+      - name: Design and developer tool connections
+      - name: AI assistant for editors
+      - name: AI documentation
+      - name: Custom branding
+      - name: MCP server (500 calls/month)
+    api_access: false
+    mcp_access: true
+    mcp_call_limit: 500 per month
+    mcp_fast_search: false
+  - id: zeroheight-starter
+    name: Starter
     type: paid
-    description: Production tier for Zeroheight. Provides higher quotas, priority support, and access
-      to the broader API portfolio. Pricing placeholder; align with the provider's pricing page.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 100000
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1
-        price: TBD
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the professional tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 100
-        timeFrame: minute
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Overage
-        description: Per-request price after monthly quota is exceeded
-        name: overage
-        type: metered
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1000
-        price: TBD
-        userMultiplied: false
+    price: '49'
+    currency: USD
+    period: month
+    unit: editor
+    seats: up to 5 editors
+    trial: 14 days
     elements:
-      - name: All Production Endpoints
-      - name: Email Support
-      - name: SLA Targets
-      - name: Webhook Subscriptions
-      - name: Zeroheight API
+      - name: 2 styleguides
+      - name: 3 token sets
+      - name: Custom domain
+      - name: Commenting
+      - name: Shared password
+      - name: Hidden pages
+      - name: MCP server (500 calls/month)
+    api_access: false
+    mcp_access: true
+    mcp_call_limit: 500 per month
+    mcp_fast_search: false
   - id: zeroheight-enterprise
     name: Enterprise
-    type: enterprise
-    description: Custom-negotiated tier for Zeroheight. Includes dedicated capacity, contractual SLAs,
-      security review, data residency options, and named technical account management.
-    entries:
-      - label: API Requests
-        description: Negotiated request volume; -1 indicates uncapped subject to fair use
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: configurable
-        domains: []
-        unit: 1
-        price: custom
-        userMultiplied: false
-      - label: Rate Limit
-        description: Negotiated burst and steady-state rate
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 1000
-        timeFrame: minute
-        geo: configurable
-        domains: []
-        unit: 1
-        price: custom
-        userMultiplied: false
+    type: custom
+    price: null
+    currency: USD
+    period: month
+    unit: editor
+    seats: 5+ editors and reviewers
+    trial: 14 days
+    contact_sales: true
     elements:
-      - name: Unlimited / Negotiated Volume
-      - name: 24/7 Dedicated Support
-      - name: Contractual SLA
-      - name: Security & Compliance Review
-      - name: Dedicated Account Manager
-      - name: Custom Data Residency
-      - name: Zeroheight API
+      - name: 5+ styleguides
+      - name: 10 token sets
+      - name: SSO
+      - name: Styleguide releases
+      - name: AI assistant for editors and viewers
+      - name: Adoption tracking
+      - name: API access
+      - name: MCP server with Fast Search
+      - name: AI integrations
+      - name: Advanced roles
+      - name: Multi-theme support
+      - name: Synced pages
+      - name: Custom templates
+      - name: Analytics
+      - name: Integrations
+      - name: Dedicated Customer Success Manager
+    api_access: true
+    mcp_access: true
+    mcp_call_limit: not published ("higher limits")
+    mcp_fast_search: true
+findings:
+  - REST API access is gated to Enterprise. Two of three published tiers cannot call https://zeroheight.com/open_api/v2 at all.
+  - The MCP server is the opposite: available on every plan including Free, which makes the agent surface materially more accessible than the HTTP one.
+  - Enterprise pricing is not published; only Free ($0) and Starter ($49/editor/month) carry numbers.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

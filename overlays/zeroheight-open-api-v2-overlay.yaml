@@ -1,0 +1,84 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the zeroheight API
+  version: 1.0.0
+extends: ../openapi/zeroheight-open-api-v2.yml
+x-provenance:
+  generated: '2026-08-28'
+  method: generated
+  source: >-
+    API Evangelist enrichment pipeline. Captures the runtime semantics harvested from zeroheight's
+    public Postman collection, help centre and live probes as JSONPath actions over the derived
+    contract, so the enhancements stay separable from the contract itself.
+actions:
+  - target: $.info
+    description: Record the rate limit and the correlation-id convention on the contract root.
+    update:
+      x-rate-limit:
+        limit: 30
+        window_seconds: 30
+        scope: api-key
+        headers:
+          - X-RateLimit-Limit
+          - X-RateLimit-Remaining
+          - X-RateLimit-Reset
+        retry_after: false
+        source: https://www.postman.com/zeroheight-0379/zeroheight/overview
+      x-request-correlation:
+        field: data.request_id
+        location: response body
+        note: Returned in the body rather than a header, so header-only logging captures nothing.
+      x-plan-gating:
+        rest_api: Enterprise plan only
+        mcp: all plans, 500 calls/month on Free and Starter
+        source: https://zeroheight.com/pricing/
+  - target: $.info
+    description: Point at the agent surface, which is materially larger than this REST contract.
+    update:
+      x-mcp:
+        endpoint: https://mcp.zeroheight.com/mcp
+        package: '@zeroheight/mcp-server'
+        mode: both
+        crosswalk: mcp/zeroheight-tool-crosswalk.yml
+        note: Only 4 of 21 MCP tools have a REST backing operation.
+  - target: $.paths['/pages/{page_id}/status'].patch
+    description: Mark the single write operation with its consequence and reversal path.
+    update:
+      x-agentic-access:
+        action_class: write
+        consequence: reversible
+        reversal: Re-issue this operation with the previous status value.
+        reversal_operationId: updatePageStatus
+        window: not applicable — state assignment with no expiry
+        precondition: Call getPageStatus first and retain the current value; it is the only undo.
+        escalation: none required
+  - target: $.paths['/pages/{page_id}'].get
+    description: Flag the markdown format as the agent-preferred representation.
+    update:
+      x-agent-preferred-format: markdown
+      x-agentic-access:
+        action_class: read
+        consequence: none
+  - target: $.paths['/styleguides'].get
+    description: Mark the discovery entry point.
+    update:
+      x-entry-point: true
+      x-agentic-access:
+        action_class: read
+        consequence: none
+  - target: $.paths['/token_sets'].get
+    description: Record that the standardised token payload is delivered outside this contract.
+    update:
+      x-domain-standards:
+        - W3C Design Tokens Community Group format (DTCG)
+        - Style Dictionary v5
+      x-note: >-
+        This route lists token SETS. The standard-conformant token payload is served from a per-set
+        Style Dictionary export URL issued in the zeroheight UI, which is not part of open_api/v2.
+  - target: $.components.schemas.ErrorEnvelope
+    description: Record that this envelope is observed, not documented, and is not RFC 9457.
+    update:
+      x-observed: true
+      x-observed-on: '2026-08-28'
+      x-rfc9457: false
+      x-catalog: errors/zeroheight-problem-types.yml

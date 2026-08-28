@@ -1,0 +1,71 @@
+specification: API Commons Lifecycle
+specificationVersion: '0.1'
+provider: Zeroheight
+providerId: zeroheight
+generated: '2026-08-28'
+method: searched
+source: >-
+  https://zeroheight.com/whats-new/ ; https://uptime.zeroheight.com/ ;
+  https://help.zeroheight.com/hc/en-us/articles/48004395674011-zeroheight-MCP-overview ;
+  openapi/zeroheight-open-api-v2.yml ; live probes 2026-08-28
+description: >-
+  Versioning, release and operational-transparency posture for the zeroheight API and MCP surfaces.
+  zeroheight runs a weekly public changelog and a Better Stack status page, but publishes no
+  deprecation policy, no sunset headers and no SLA — which for an API on its second major version is
+  the notable absence.
+versioning:
+  strategy: path
+  pattern: https://zeroheight.com/open_api/{version}
+  current: v2
+  previous:
+    - version: v1
+      status: unknown
+      note: v2 is the only version referenced in current documentation, the Postman collection and every tutorial. No v1 sunset notice was found; whether v1 still answers was not probed against a live v1 path.
+  header_versioning: false
+  media_type_versioning: false
+mcp_versioning:
+  package: '@zeroheight/mcp-server'
+  scheme: semver
+  current: 2.10.2
+  released: '2026-06-17'
+  releases: 20
+  note: The local MCP server is versioned on npm; the remote endpoint at https://mcp.zeroheight.com/mcp is unversioned in its URL.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  note: >-
+    No deprecation or sunset policy is published anywhere on zeroheight.com, developers.zeroheight.com
+    or the help centre, and no operation in the derived contract is marked deprecated. A consumer has
+    no published notice period.
+  content_deprecation_note: >-
+    zeroheight does ship a "Deprecated" page STATUS TAG for its customers' own design system content
+    (relabelled "Needs content" on its developer styleguide). That is a feature of the product, not a
+    deprecation policy for zeroheight's own API, and the two must not be conflated.
+status_page:
+  url: https://uptime.zeroheight.com/
+  platform: Better Stack
+  http_status: 200
+  components: 2
+  statuses: [up, warn, down, maintenance]
+  verified: '2026-08-28'
+  note: >-
+    status.zeroheight.com is NOT the status page — it returns the zeroheight application shell. The
+    real status page is uptime.zeroheight.com.
+changelog:
+  url: https://zeroheight.com/whats-new/
+  cadence: weekly
+  entries_published: 139
+  latest: '2026-07-30'
+  file: changelog/zeroheight-changelog.yml
+sla:
+  published: false
+  note: No public uptime commitment or support-response SLA was found; Enterprise customers get a dedicated Customer Success Manager, which is a relationship, not an SLA.
+support:
+  email: support@zeroheight.com
+  help_center: https://help.zeroheight.com/
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

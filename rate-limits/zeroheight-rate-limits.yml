@@ -4,84 +4,63 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Zeroheight
 providerId: zeroheight
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
+modified: '2026-08-28'
+generated: '2026-08-28'
+method: searched
+source: >-
+  https://www.postman.com/zeroheight-0379/zeroheight/overview (zeroheight's own public Postman
+  collection, saved verbatim at postman/zeroheight-api.postman_collection.json) ;
+  https://help.zeroheight.com/hc/en-us/articles/48004395674011-zeroheight-MCP-overview
 tags:
   - Rate Limiting
   - Quotas
   - Throttling
-description: Machine-readable rate limit definitions for the Zeroheight API surface. Captures per-tier
-  quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to
-  be replaced with published provider limits.
+description: >-
+  Published zeroheight rate limits. Replaces a 2026-05-04 scaffold that carried invented per-tier
+  numbers (10/100/1000 rpm) — those were never zeroheight's and have been removed. zeroheight
+  publishes exactly one REST limit, applied per API key, plus a separate monthly call cap on the MCP
+  surface for Free and Starter plans.
 headers:
   limit: X-RateLimit-Limit
   remaining: X-RateLimit-Remaining
   reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
 responseCodes:
   throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
+header_semantics:
+  X-RateLimit-Limit: The maximum number of requests that the consumer is permitted to make per minute.
+  X-RateLimit-Remaining: The number of requests remaining in the current rate limit window.
+  X-RateLimit-Reset: The time at which the current rate limit window resets, in UTC epoch seconds.
 limits:
-  - tier: free
-    name: Free Tier Default
+  - name: REST API per-key limit
     scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
+    metric: requests
+    limit: 30
+    timeFrame: 30 seconds
+    window_seconds: 30
+    surface: https://zeroheight.com/open_api/v2
     applies:
       - Zeroheight API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
+    source: zeroheight public Postman collection, "Rate and usage limits"
+    quote: 'API access rate limits apply at a per-API key basis in unit time. The limit is 30 requests per 30 seconds.'
+  - name: MCP monthly call cap (Free and Starter)
+    scope: plan
+    metric: mcp_calls
+    limit: 500
     timeFrame: month
+    surface: https://mcp.zeroheight.com/mcp
     applies:
-      - Zeroheight API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - Zeroheight API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Zeroheight API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Zeroheight API
+      - zeroheight MCP
+    source: https://help.zeroheight.com/hc/en-us/articles/48004395674011-zeroheight-MCP-overview
+    note: Free and Starter are capped at 500 MCP calls per month and do not include the fast search tool. Enterprise gets higher limits, not publicly numbered.
+limit_count: 2
+gaps:
+  - No Retry-After header is documented, and no RateLimit-Policy / draft RFC 9238-style headers are used — only the three X-RateLimit-* headers.
+  - The 429 body shape is not documented; by observation of the live API every error uses the same {status,message,data.request_id} envelope.
+  - The header description says "per minute" while the published limit is per 30 seconds. zeroheight's own docs are internally inconsistent here; both are recorded verbatim rather than reconciled.
+  - Enterprise MCP limits are described only as "higher limits" with no number.
 policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+  - name: Plan gating
+    description: REST API access is an Enterprise-plan feature. Free and Starter accounts cannot call the REST API at all, which is a harder limit than any rate.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

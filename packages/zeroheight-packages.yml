@@ -1,0 +1,101 @@
+specification: API Commons Packages
+specificationVersion: '0.1'
+provider: Zeroheight
+providerId: zeroheight
+generated: '2026-08-28'
+method: searched
+source: >-
+  https://registry.npmjs.org/-/v1/search?text=zeroheight ; per-package metadata read from
+  registry.npmjs.org on 2026-08-28 ; https://github.com/zeroheight
+description: >-
+  First-party zeroheight client libraries and tooling. zeroheight publishes no REST SDK for its
+  open_api/v2 surface — every official package is an agent/CI/editor integration rather than a
+  wrapper over the HTTP API. All three npm packages are published from the @zeroheight scope by
+  GitHub Actions.
+registries_checked:
+  - registry: npm
+    result: 3 first-party packages found under the @zeroheight scope
+  - registry: pypi
+    result: no first-party package
+  - registry: rubygems
+    result: no first-party package
+  - registry: packagist
+    result: no first-party package
+  - registry: crates.io
+    result: no first-party package
+  - registry: maven-central
+    result: no first-party package
+  - registry: nuget
+    result: no first-party package
+  - registry: pkg.go.dev
+    result: no first-party package
+packages:
+  - name: '@zeroheight/mcp-server'
+    official: true
+    registry: npm
+    language: JavaScript/TypeScript
+    url: https://www.npmjs.com/package/@zeroheight/mcp-server
+    version: 2.10.2
+    published: '2026-06-17'
+    first_published: '2025-08-15'
+    release_count: 20
+    license: ISC
+    homepage: https://zeroheight.com
+    bin: mcp-server
+    install: npx -y @zeroheight/mcp-server@latest
+    kind: mcp-server
+    description: >-
+      The local (stdio) zeroheight MCP server. Exposes the design system read tools to Claude
+      Desktop, VS Code, Cursor, Windsurf and other MCP clients. Requires Node.js 22+.
+    note: Authenticates by browser OAuth by default, or by ZEROHEIGHT_CLIENT_ID / ZEROHEIGHT_ACCESS_TOKEN environment variables which it forwards as X-API-CLIENT and X-API-KEY.
+  - name: '@zeroheight/adoption-cli'
+    official: true
+    registry: npm
+    language: JavaScript/TypeScript
+    url: https://www.npmjs.com/package/@zeroheight/adoption-cli
+    version: 4.1.5
+    published: '2026-04-01'
+    first_published: '2024-06-03'
+    release_count: 59
+    license: ISC
+    homepage: https://zeroheight.com
+    bin: zh-adoption
+    install: npx @zeroheight/adoption-cli
+    kind: cli
+    description: >-
+      The zeroheight Adoption CLI — measures design system component usage, tracks published package
+      versions and analyses colour-token usage, pushing results to the zeroheight Adoption dashboard.
+    note: Authenticates in CI with the ZEROHEIGHT_CLIENT_ID and ZEROHEIGHT_ACCESS_TOKEN environment variables.
+  - name: '@zeroheight/storybook-addon'
+    official: true
+    registry: npm
+    language: JavaScript/TypeScript
+    url: https://www.npmjs.com/package/@zeroheight/storybook-addon
+    version: 3.1.0
+    published: '2026-08-04'
+    first_published: '2025-03-11'
+    release_count: 11
+    license: MIT
+    repository: https://github.com/zeroheight/storybook-addon
+    kind: ui-integration
+    description: Renders zeroheight documentation inside Storybook stories.
+  - name: zeroheight/action-design-system-adoption
+    official: true
+    registry: github-actions
+    url: https://github.com/zeroheight/action-design-system-adoption
+    version: null
+    published: null
+    kind: ci-action
+    description: GitHub Action wrapper around the Adoption CLI for analysing and tracking design system adoption in CI.
+    note: >-
+      version/published recorded as null deliberately — a GitHub Action is distributed by git ref, not
+      by a package registry with a metadata endpoint, and the repository publishes no release tag
+      readable without a git-ref probe. Repository last pushed 2026-08-18.
+findings:
+  - No REST SDK. A consumer of https://zeroheight.com/open_api/v2 writes raw HTTP; zeroheight ships no
+    client library in any language for it.
+  - The freshest first-party package is the Storybook addon (2026-08-04); the MCP server is 2.5 months
+    old and the Adoption CLI is 5 months old. Nothing here reads as abandoned.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

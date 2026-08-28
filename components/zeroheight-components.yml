@@ -1,0 +1,61 @@
+specification: API Commons Components
+specificationVersion: '0.1'
+provider: Zeroheight
+providerId: zeroheight
+generated: '2026-08-28'
+method: searched
+source: >-
+  https://www.npmjs.com/package/@zeroheight/storybook-addon ;
+  https://github.com/zeroheight/storybook-addon ;
+  https://help.zeroheight.com/hc/en-us/articles/43780251357979-Using-the-remote-zeroheight-MCP-server ;
+  https://zeroheight.com/integrations/
+description: >-
+  zeroheight's embeddable surface runs in two directions, and it is worth separating them. Outward,
+  it publishes one client-side library — a Storybook addon that renders zeroheight documentation
+  inside a consumer's own Storybook UI. Inward, the zeroheight editor exposes authoring blocks that
+  embed third-party surfaces (Figma, Storybook, livecode, git markdown) and one block that emits
+  agent connection details. There is no hosted widget, embeddable dashboard or JS SDK for the REST
+  API.
+families:
+  - name: Storybook integration
+    kind: client-side library
+    packages:
+      - name: '@zeroheight/storybook-addon'
+        version: '3.1.0'
+        published: '2026-08-04'
+        registry: npm
+        license: MIT
+        repository: https://github.com/zeroheight/storybook-addon
+        description: Renders zeroheight documentation inside Storybook stories, so a developer reads the design system guidance next to the component.
+  - name: Editor embed blocks
+    kind: authoring blocks (in-product, not consumer-installable)
+    note: >-
+      Page-content block types that embed external surfaces into a zeroheight page. Enumerated from
+      the MCP write-tools reference, which names the block types an agent may author.
+    blocks:
+      - name: Figma design embed
+        backed_by: list-design-libraries / get-designs
+      - name: Do's and don'ts
+      - name: Component set / component data table
+        backed_by: list-component-sets / get-component-set
+      - name: Token mention and token table
+        backed_by: list-token-sets / list-tokens
+      - name: Markdown from a connected git repository
+        backed_by: list-repositories / get-repository / create-markdown-snapshot
+      - name: Storybook embed
+        backed_by: get-storybooks / get-stories
+      - name: Livecode
+        backed_by: get-livecode-settings
+        note: Runs against npm packages and shared resources configured per styleguide.
+      - name: Remote MCP details
+        description: >-
+          An authoring block that renders MCP connection instructions and, in "MCP via link" mode,
+          each viewer's unique MCP URL. Effectively a self-service agent-onboarding widget the
+          customer places on their own documentation page.
+      - name: Tabs, callouts, code blocks, tables, lists, images and attachments
+gaps:
+  - No JavaScript SDK or embeddable widget for the REST API.
+  - No hosted/prebuilt UI surface a customer can drop into their own product to render zeroheight content, other than the Storybook addon.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

@@ -1,0 +1,76 @@
+specification: API Commons ChangeLog
+specificationVersion: '0.1'
+provider: Zeroheight
+providerId: zeroheight
+generated: '2026-08-28'
+method: searched
+source: https://zeroheight.com/whats-new/
+url: https://zeroheight.com/whats-new/
+description: >-
+  zeroheight publishes a dated product changelog at /whats-new/, split into two post types —
+  "Changelog" entries on a roughly weekly cadence, and longer "Releases" write-ups for marquee
+  features. 139 entries are published. The recent window is dominated by agent work: MCP for
+  viewers, a ChatGPT connector, a Figma Make integration, a Figma agent connector, and analytics
+  that measure AI consumption of a design system.
+scheme: dated posts, not semantic versions
+cadence: weekly
+entries_published: 139
+latest: '2026-07-30'
+breaking_change_labelling: false
+api_specific_feed: false
+note: >-
+  The changelog is product-wide. There is no API-specific or MCP-specific changelog, and entries are
+  not labelled breaking vs additive, so an API consumer must read every post to find the ones that
+  affect them.
+entries:
+  - date: '2026-07-30'
+    type: release
+    title: 'Draft Pages and Reviewing: more control over how updates are prepared and released'
+    url: https://zeroheight.com/whats-new/draft-pages-and-reviewing-more-control-over-how-updates-are-prepared-and-released/
+    breaking: false
+  - date: '2026-07-27'
+    type: changelog
+    title: 'Changelog: 27 July, 2026 — Bulk Markdown Export, Figma design links, and settings updates'
+    url: https://zeroheight.com/whats-new/changelog-27-july-2026-bulk-markdown-export-figma-design-links-and-settings-updates/
+    breaking: false
+    highlights: [Bulk Markdown Export, Figma design links, settings updates]
+  - date: '2026-07-21'
+    type: release
+    title: 'New AI Analytics: measure how your design system is being consumed by AI'
+    url: https://zeroheight.com/whats-new/new-ai-analytics-measure-how-your-design-system-is-being-consumed-by-ai/
+    breaking: false
+  - date: '2026-07-20'
+    type: changelog
+    title: 'Changelog: 20 July, 2026 — AI consumption tracking in Analytics'
+    url: https://zeroheight.com/whats-new/changelog-6-july-2026-ai-consumption-tracking-in-analytics/
+    breaking: false
+  - date: '2026-07-06'
+    type: release
+    title: 'zeroheight connector for Figma agent: design system context, applied on the canvas'
+    url: https://zeroheight.com/whats-new/zeroheight-connector-for-figma-agent/
+    breaking: false
+  - date: '2026-07-06'
+    type: changelog
+    title: 'Changelog: 6 July, 2026 — Accessibility improvements'
+    url: https://zeroheight.com/whats-new/changelog-6-july-2026-accessibility-improvements/
+    breaking: false
+  - date: '2026-06-29'
+    type: changelog
+    title: 'Changelog: 29 June, 2026 — MCP for viewers, ChatGPT connector, and Figma Make integration'
+    url: https://zeroheight.com/whats-new/changelog-29-june-2026-mcp-for-viewers-chatgpt-connector-and-figma-make-integration/
+    breaking: false
+    highlights: [MCP for viewers, ChatGPT connector, Figma Make integration]
+  - date: '2026-06-22'
+    type: changelog
+    title: 'Changelog: 22 June, 2026 — Smarter styleguide search and accessibility improvements'
+    url: https://zeroheight.com/whats-new/changelog-22-june-2026-smarter-styleguide-search-and-accessibility-improvements/
+    breaking: false
+  - date: '2026-06-15'
+    type: changelog
+    title: 'Changelog: 15 June, 2026 — Settings navigation update, MCP via Login for admins and editors'
+    url: https://zeroheight.com/whats-new/changelog-15-june-2026-settings-navigation-update/
+    breaking: false
+    highlights: [MCP via Login for admins and editors]
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

@@ -1,0 +1,149 @@
+specification: API Commons Conventions
+specificationVersion: '0.1'
+provider: Zeroheight
+providerId: zeroheight
+generated: '2026-08-28'
+method: searched
+source: >-
+  postman/zeroheight-api.postman_collection.json ; openapi/zeroheight-open-api-v2.yml ;
+  https://help.zeroheight.com/hc/en-us/articles/35887050539035 ;
+  https://help.zeroheight.com/hc/en-us/articles/35887062307355-Automate-zeroheight-with-Zapier ;
+  live probes of https://zeroheight.com/open_api/v2 on 2026-08-28
+description: >-
+  Cross-cutting runtime semantics for the zeroheight API. The surface is small and almost entirely
+  read-only — one write operation, PATCH on a page status — which shapes every answer below. Where
+  zeroheight publishes nothing the entry says so rather than assuming a default.
+auth:
+  style: paired API key headers
+  headers: [X-API-CLIENT, X-API-KEY]
+  see: authentication/zeroheight-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  scope: null
+  retention: null
+  note: >-
+    zeroheight publishes no idempotency key mechanism. The API has exactly one write operation and it
+    is PATCH /pages/{page_id}/status, which is naturally idempotent in effect — setting a page's
+    status to "Ready" twice leaves the same state as setting it once — so a retry cannot double-fire
+    a side effect. That is idempotency by surface shape, not by contract, and it would stop being
+    true the moment a create operation shipped (the closed-beta MCP create-page tool is exactly that
+    case, and it has no idempotency key either).
+  grade: na-by-surface
+pagination:
+  style: undocumented
+  params: []
+  response_fields: []
+  note: >-
+    No pagination parameters are documented for the collection routes (/styleguides, /pages,
+    /styleguides/{id}/pages, /token_sets) and none could be observed because every route is
+    401-gated. An integrator cannot tell from anything zeroheight publishes whether a styleguide with
+    2,000 pages returns all of them.
+filtering_and_search:
+  supported: false
+  note: >-
+    No query, filter or search parameter exists on any REST route. Search lives only on the MCP
+    surface, as the Enterprise-gated search-pages tool.
+field_selection:
+  expansion: false
+  sparse_fields: false
+  format_negotiation:
+    param: format
+    values: [markdown]
+    applies_to: [getPage]
+    source: zeroheight's own Postman collection ships a saved "Markdown format" example using ?format=markdown
+metadata:
+  custom_metadata: false
+request_tracing:
+  field: data.request_id
+  location: response body
+  scope: every error response observed
+  header: none
+  note: >-
+    A correlation id is returned in the BODY, not in a response header. That is unusual and it
+    matters operationally: a client that only logs headers captures nothing, and a 200 response was
+    not observable so it is unknown whether success responses carry one at all.
+versioning:
+  style: path
+  current: v2
+  see: lifecycle/zeroheight-lifecycle.yml
+error_envelope:
+  shape: '{ status, message, data: { request_id } }'
+  rfc9457: false
+  see: errors/zeroheight-problem-types.yml
+rate_limit_signaling:
+  headers: [X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset]
+  retry_after: false
+  status: 429
+  see: rate-limits/zeroheight-rate-limits.yml
+content_types:
+  request: application/json
+  response: application/json
+dry_run_mode:
+  supported: false
+  grade: na
+  note: One write operation, no preview/validate mode. Nothing to rehearse.
+reversibility:
+  grade: na
+  api_is_read_only: near
+  note: >-
+    The REST API has a single write operation — PATCH /pages/{page_id}/status — and it is a state
+    SET, not an event. It has no reversal operation because it needs none: an agent undoes it by
+    PATCHing the previous status back, and zeroheight's own Zapier trigger carries "Old Status" and
+    "New Status" fields, so the prior value is recoverable from the change notification. There is no
+    window, because there is nothing to expire.
+  write_surfaces:
+    - operation: updatePageStatus
+      method: PATCH
+      path: /pages/{page_id}/status
+      reversal: re-issue PATCH with the previous status value
+      reversal_operationId: updatePageStatus
+      window: not applicable — state assignment, no expiry
+      window_source: null
+      grade: na
+      note: >-
+        Recorded as `na` rather than `verified` deliberately. zeroheight states no reversal window
+        anywhere, and asserting one would be inventing a fact. What IS true and useful is that the
+        operation is losslessly reversible by a second call to itself.
+    - operation: create-page (MCP, closed beta)
+      surface: https://mcp.zeroheight.com/mcp
+      reversal: none published
+      window: none published
+      grade: undocumented
+      note: >-
+        The closed-beta MCP write surface creates pages and uploads assets. zeroheight documents no
+        delete-page or delete-asset tool, so an agent that creates a wrong page cannot remove it
+        through the API — a human must delete it in the app. The mitigation zeroheight documents is
+        preventive, not corrective: create the page hidden, and let it sit in the work-in-progress
+        release until a person publishes it.
+        THIS IS THE ONE REAL REVERSIBILITY GAP IN THE ESTATE and it is on the newest, agent-facing
+        surface.
+  agent_guidance: >-
+    Read the current status with getPageStatus before calling updatePageStatus, and keep the value —
+    it is the only undo. When using the MCP write tools, always pass the hidden flag.
+events:
+  provider_webhooks: false
+  asyncapi: false
+  note: >-
+    zeroheight publishes no webhook API and no AsyncAPI. Its only event surface is the Zapier app,
+    where the events are consumed as Zapier triggers rather than as HTTP callbacks the customer
+    registers. Recorded here rather than as an asyncapi/ artifact, and NO Webhooks pointer is emitted
+    in apis.yml, because zeroheight does not advertise webhooks.
+  zapier_triggers:
+    - name: Page Status Updated
+      fields: [Styleguide ID, Page ID, Page Name, Old Status, New Status]
+    - name: Styleguide Released
+      fields: [Styleguide Version ID, Styleguide ID, Release Name, Release Date, Created At, Project ID, Release URL, Styleguide Name, Release Notes]
+      note: Release notes are delivered as HTML.
+  zapier_actions:
+    - name: Update Page Status
+      inputs: [Styleguide, Page, Status]
+    - name: Find Page
+      note: Substring match on page name; returns the first match in navigation order, not an exact match. A silent-wrong-page hazard for an automated flow.
+    - name: Find Styleguide
+      note: Name match; returns the first match in the account.
+  zapier_limits: 'No limits; fair use applies.'
+  zapier_auth: Client ID + Access Token with access level "Read and write" for any action that changes content.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

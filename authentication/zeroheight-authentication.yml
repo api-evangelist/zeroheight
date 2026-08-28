@@ -1,0 +1,94 @@
+specification: API Commons Authentication
+specificationVersion: '0.1'
+provider: Zeroheight
+providerId: zeroheight
+generated: '2026-08-28'
+method: searched
+source: >-
+  https://help.zeroheight.com/hc/en-us/articles/35887043412251-Zeroheight-API-Authentication-token-creation ;
+  https://help.zeroheight.com/hc/en-us/articles/35887050539035 ;
+  postman/zeroheight-api.postman_collection.json ;
+  https://www.npmjs.com/package/@zeroheight/mcp-server ;
+  live 401 probes of https://zeroheight.com/open_api/v2 on 2026-08-28
+docs: https://developers.zeroheight.com/75fe5b2ed/p/6599ef-creation
+description: >-
+  zeroheight authenticates the REST API with a paired Client ID and Access Token sent as two custom
+  headers. There is no OAuth on the REST surface. OAuth exists only on the MCP surface, where the
+  remote server runs a browser login flow against the customer's zeroheight team (password or SSO).
+schemes:
+  - id: apiClient
+    type: apiKey
+    in: header
+    name: X-API-CLIENT
+    required: true
+    description: The Client ID. May be shared; remains visible in organization/workspace settings.
+    key_prefix: zhci_
+  - id: apiKey
+    type: apiKey
+    in: header
+    name: X-API-KEY
+    required: true
+    description: The Access Token. Shown exactly once on creation and never again; treat like a password.
+    key_prefix: zhat_
+  - id: mcpOAuth
+    type: oauth2
+    surface: MCP
+    flow: authorization_code (browser)
+    description: >-
+      The remote MCP server at https://mcp.zeroheight.com/mcp and the local stdio server both start a
+      browser OAuth flow. Admins/editors may sign in with username/password or SSO; viewers must use
+      SSO. The user enters their zeroheight team subdomain, signs in, then approves the connection.
+    token_storage: '~/.zeroheight/mcp-oauth.json (local stdio server)'
+    discovery: >-
+      NOT discoverable. Neither /.well-known/oauth-authorization-server (RFC 8414) nor
+      /.well-known/oauth-protected-resource (RFC 9728) is served on mcp.zeroheight.com — both 404.
+  - id: mcpLinkCredential
+    type: bearer-in-url
+    surface: MCP
+    description: >-
+      "MCP via link" issues each viewer a unique MCP URL that carries its own credential. The URL is
+      the secret; zeroheight tells customers not to share their own URL. Private pages are not
+      reachable through it.
+token_management:
+  created_at: Developers section of organization or workspace settings
+  ownership: Tokens belong to the team, not an individual, so activity can be monitored centrally.
+  who_can_create: any member with editor permissions
+  acting_as: actions taken with a token are performed on behalf of the member who created it
+  quantity: unlimited — create and revoke as many as needed
+  rotation: tokens can be regenerated; a suspected leak should be revoked immediately
+  visibility: Access Token displayed once at creation; Client ID remains retrievable
+  use_cases:
+    - name: Measure Adoption
+      description: Pre-defined scope set for authenticating @zeroheight/adoption-cli — package versions, component usage.
+    - name: Zapier
+      description: Pre-defined scope set for Zapier automation workflows. Requires "Read and write" access level for actions that change content.
+    - name: Style Dictionary Exports
+      description: Pre-defined scope set for accessing private design-token export URLs.
+  granular_scopes:
+    available: true
+    plans: Enterprise only
+    description: Granular CLI scopes for precise control over access levels beyond the pre-defined use cases.
+  access_levels:
+    - Read
+    - Read and write
+environment_variables:
+  - name: ZEROHEIGHT_CLIENT_ID
+    used_by: ['@zeroheight/mcp-server', '@zeroheight/adoption-cli']
+    maps_to: X-API-CLIENT
+  - name: ZEROHEIGHT_ACCESS_TOKEN
+    used_by: ['@zeroheight/mcp-server', '@zeroheight/adoption-cli']
+    maps_to: X-API-KEY
+failure_semantics:
+  status: 401
+  body: '{"status":"fail","message":"Unauthorized","data":{"request_id":"..."}}'
+  triggers: [missing key, malformed key, invalid key]
+  observed: '2026-08-28 on GET https://zeroheight.com/open_api/v2/styleguides'
+plan_gating:
+  rest_api: Enterprise plan only — API access is not listed on Free or Starter.
+  mcp: all plans, capped at 500 calls/month on Free and Starter.
+sso:
+  supported: true
+  note: SAML/SSO sign-in for styleguide viewers; separate SSO configurations can be applied per workspace, and SSO viewer groups control which styleguides a viewer reaches over MCP.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

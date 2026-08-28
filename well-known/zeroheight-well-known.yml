@@ -1,0 +1,118 @@
+specification: API Commons Well-Known
+specificationVersion: '0.1'
+provider: Zeroheight
+providerId: zeroheight
+generated: '2026-08-28'
+method: probed
+source: live unauthenticated GET probes on 2026-08-28
+description: >-
+  zeroheight serves no /.well-known/ documents on any of its hosts. Every path below was probed once,
+  unauthenticated, and every one missed. NO WellKnown or SecurityTxt pointer is emitted in apis.yml —
+  this file records an absence, and an absence must not be scored as a presence.
+notes:
+  - zeroheight.com, developers.zeroheight.com and mcp.zeroheight.com all answer 404 for every
+    /.well-known/ path. The 404s carry real not-found bodies, not SPA shells masquerading as 200s.
+  - api.zeroheight.com is an AWS API Gateway that answers every path with HTTP 403
+    {"message":"Missing Authentication Token"} — it is not the public API host and serves no
+    well-known documents.
+  - The remote MCP server at https://mcp.zeroheight.com/mcp performs OAuth but publishes neither
+    /.well-known/oauth-authorization-server nor /.well-known/oauth-protected-resource (RFC 9728),
+    so an MCP client cannot discover its authorization server anonymously.
+hosts:
+  - host: zeroheight.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+      - path: /.well-known/openid-configuration
+        status: 404
+        file: null
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        file: null
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        file: null
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+  - host: developers.zeroheight.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+      - path: /.well-known/openid-configuration
+        status: 404
+        file: null
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        file: null
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        file: null
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+  - host: mcp.zeroheight.com
+    documents:
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        file: null
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        file: null
+  - host: api.zeroheight.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 403
+        file: null
+      - path: /.well-known/oauth-authorization-server
+        status: 403
+        file: null
+      - path: /.well-known/oauth-protected-resource
+        status: 403
+        file: null
+      - path: /.well-known/api-catalog
+        status: 403
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 403
+        file: null
+      - path: /.well-known/agent.json
+        status: 403
+        file: null
+  - host: help.zeroheight.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

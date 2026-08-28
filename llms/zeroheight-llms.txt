@@ -1,0 +1,106 @@
+# zeroheight
+
+> zeroheight is a design system platform. Teams document components, patterns, guidelines and design
+> tokens in a styleguide, then deliver that documentation to designers, engineers and — increasingly —
+> to AI agents. zeroheight exposes two machine surfaces: a small key-authenticated REST API for
+> styleguides, pages, page statuses, versions and token sets, and a substantially richer Model
+> Context Protocol server that lets a coding or prototyping agent read the design system directly.
+
+GENERATED, NOT PUBLISHED: zeroheight serves no /llms.txt (HTTP 404 on zeroheight.com,
+developers.zeroheight.com and help.zeroheight.com, probed 2026-08-28). This file was written by API
+Evangelist from the artifacts in this repository and from zeroheight's own public documentation.
+
+## Surfaces
+
+- REST API base: https://zeroheight.com/open_api/v2 (Enterprise plan only)
+- Remote MCP endpoint: https://mcp.zeroheight.com/mcp (all plans; 500 calls/month on Free and Starter)
+- Local MCP server: npx -y @zeroheight/mcp-server@latest
+- Developer reference: https://developers.zeroheight.com/ (client-rendered; not machine-readable)
+- Public Postman collection: https://www.postman.com/zeroheight-0379/zeroheight/overview
+
+## Authentication
+
+- REST: two headers together — X-API-CLIENT (Client ID, prefix zhci_) and X-API-KEY (Access Token,
+  prefix zhat_). Create both in the Developers section of organization or workspace settings. The
+  Access Token is shown once. Missing/malformed/invalid credentials return HTTP 401.
+- MCP: browser OAuth against your zeroheight team (password or SSO), or the same Client ID and
+  Access Token supplied as ZEROHEIGHT_CLIENT_ID and ZEROHEIGHT_ACCESS_TOKEN environment variables.
+- Details: authentication/zeroheight-authentication.yml, scopes/zeroheight-scopes.yml
+
+## REST operations (9, all verified live)
+
+- GET /styleguides — listStyleguides
+- GET /styleguides/{styleguide_id}/pages — listStyleguidePages
+- GET /styleguides/{styleguide_id}/versions — listStyleguideVersions
+- GET /styleguides/{styleguide_id}/categories — listStyleguideCategories
+- GET /pages — listPages
+- GET /pages/{page_id} — getPage (supports ?format=markdown)
+- GET /pages/{page_id}/status — getPageStatus
+- PATCH /pages/{page_id}/status — updatePageStatus (the only write operation)
+- GET /token_sets — listTokenSets
+
+Contract: openapi/zeroheight-open-api-v2.yml
+
+## MCP tools
+
+Read: list-styleguides, search-pages (Enterprise + AI features), list-pages, get-page,
+get-page-asset, list-releases.
+Write (closed beta, admins/editors via MCP-via-login only): create-page, upload-asset,
+list-design-libraries, get-designs, list-component-sets, get-component-set, list-token-sets,
+list-tokens, list-repositories, get-repository, create-markdown-snapshot, get-storybooks,
+get-stories, get-livecode-settings, read-resource.
+Resource: zeroheight://editor-instructions (the editor XML format guide).
+
+Details: mcp/zeroheight-mcp.yml — REST/MCP mapping: mcp/zeroheight-tool-crosswalk.yml
+
+## Runtime semantics an agent should know
+
+- Rate limit: 30 requests per 30 seconds per API key. Headers X-RateLimit-Limit,
+  X-RateLimit-Remaining, X-RateLimit-Reset. No Retry-After — compute the wait from the reset epoch.
+- Errors: a custom envelope {status, message, data.request_id}, not RFC 9457. Every error carries a
+  request_id; quote it to support. 404 means either "no such route" or "no such resource" — the two
+  are not distinguishable.
+- Pagination: not documented on any collection route.
+- No idempotency key. The one write operation is a state assignment and is safe to retry.
+- Reversibility: undo a page-status change by PATCHing the previous status back — read it first with
+  getPageStatus. The MCP create-page tool has NO deletion counterpart; always create pages hidden.
+- Versioning: in the path (/open_api/v2). No deprecation or sunset policy is published.
+
+Details: conventions/zeroheight-conventions.yml, errors/zeroheight-problem-types.yml,
+rate-limits/zeroheight-rate-limits.yml, lifecycle/zeroheight-lifecycle.yml
+
+## Design tokens
+
+Token sets export as W3C DTCG JSON, or through a stable per-set Style Dictionary (v5) URL that can
+be used directly as a build-pipeline endpoint. Private export URLs authenticate with the same Client
+ID and Access Token headers. Composite tokens are unsupported in platform-specific exports.
+Details: conformance/zeroheight-conformance.yml
+
+## Tooling
+
+- @zeroheight/adoption-cli — codebase scanner for component and token adoption (cli/zeroheight-cli.yml)
+- @zeroheight/storybook-addon — renders zeroheight docs inside Storybook
+- zeroheight/action-design-system-adoption — GitHub Action wrapper for the Adoption CLI
+- Zapier app — triggers on Page Status Updated and Styleguide Released; actions Update Page Status,
+  Find Page, Find Styleguide
+
+## Plans
+
+Free ($0, 1 editor), Starter ($49/editor/month, up to 5 editors), Enterprise (contact sales).
+REST API access is Enterprise-only. MCP is on every plan.
+Details: plans/zeroheight-plans-pricing.yml
+
+## Operations
+
+- Status page: https://uptime.zeroheight.com/ (Better Stack). status.zeroheight.com is NOT the status page.
+- Changelog: https://zeroheight.com/whats-new/ (weekly, 139 entries)
+- Trust center: https://trust.zeroheight.com/ — SOC 2, ISO 27001
+- Support: support@zeroheight.com, https://help.zeroheight.com/
+
+## Known gaps
+
+- No published OpenAPI; the developer reference is a JavaScript-rendered single-page app that returns
+  the same HTML shell for every page, so no machine can read it.
+- No /llms.txt, no /.well-known/ documents of any kind, no agent card.
+- No OAuth discovery metadata on the MCP host despite the MCP running OAuth.
+- No SDK in any language for the REST API.

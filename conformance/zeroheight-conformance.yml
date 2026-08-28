@@ -1,0 +1,135 @@
+specification: API Commons Conformance
+specificationVersion: '0.1'
+provider: Zeroheight
+providerId: zeroheight
+generated: '2026-08-28'
+method: searched
+source: >-
+  https://trust.zeroheight.com/ ;
+  https://help.zeroheight.com/hc/en-us/articles/35887016596123-Exporting-and-integrating-design-tokens-into-developer-pipelines ;
+  https://help.zeroheight.com/hc/en-us/articles/48049028236187-Migrating-to-Style-Dictionary-v5-in-tokens-automation ;
+  https://help.zeroheight.com/hc/en-us/articles/48004395674011-zeroheight-MCP-overview ;
+  openapi/zeroheight-open-api-v2.yml ; live probes 2026-08-28
+description: >-
+  Cross-cutting and domain-standard conformance for zeroheight. The headline is the split: on
+  generic API standards zeroheight conforms to almost nothing — no OAuth on the REST surface, no
+  RFC 9457, no RFC 8594, no OpenAPI — while on the standards that actually matter in ITS market,
+  design tokens, it is a first-class implementer. That asymmetry is the finding.
+conformance:
+  - id: openapi
+    name: OpenAPI Specification
+    conforms: false
+    evidence:
+      - zeroheight publishes no OpenAPI or Swagger document. /openapi.json, /openapi.yaml, /swagger.json and /api-docs all 404 on developers.zeroheight.com and are not served on the API host.
+      - The contract in openapi/ was derived by API Evangelist from zeroheight's own Postman collection and live route probes, not published by zeroheight.
+  - id: postman-collection
+    name: Postman Collection v2.0.0
+    conforms: true
+    evidence:
+      - zeroheight publishes a public Postman workspace and collection - https://www.postman.com/zeroheight-0379/zeroheight/overview
+      - 'Collection schema - https://schema.getpostman.com/json/collection/v2.0.0/collection.json'
+      - Saved verbatim at postman/zeroheight-api.postman_collection.json
+  - id: oauth2
+    name: OAuth 2.0
+    conforms: partial
+    evidence:
+      - The REST API uses paired API-key headers (X-API-CLIENT / X-API-KEY), not OAuth.
+      - The MCP server runs a browser OAuth authorization-code flow against the customer's zeroheight team.
+      - 'Discovery is absent - https://mcp.zeroheight.com/.well-known/oauth-authorization-server returns 404.'
+  - id: rfc9728
+    name: RFC 9728 OAuth 2.0 Protected Resource Metadata
+    conforms: false
+    evidence:
+      - 'GET https://mcp.zeroheight.com/.well-known/oauth-protected-resource - 404 on 2026-08-28.'
+      - An MCP client cannot discover the authorization server anonymously; the flow is initiated by the client, not advertised by the resource.
+  - id: oidc
+    name: OpenID Connect
+    conforms: false
+    evidence:
+      - '/.well-known/openid-configuration returns 404 on zeroheight.com and developers.zeroheight.com.'
+      - SSO for styleguide viewers is offered as an Enterprise feature but no OIDC discovery document is served.
+  - id: rfc9457
+    name: RFC 9457 Problem Details for HTTP APIs
+    conforms: false
+    evidence:
+      - 'Errors return a custom envelope - {"status":"fail","message":"Unauthorized","data":{"request_id":"..."}} with content-type application/json, not application/problem+json. Observed live 2026-08-28.'
+  - id: rfc8594
+    name: RFC 8594 Sunset HTTP Header
+    conforms: false
+    evidence:
+      - No Sunset or Deprecation header and no published deprecation policy.
+  - id: rfc9116
+    name: RFC 9116 security.txt
+    conforms: false
+    evidence:
+      - '/.well-known/security.txt returns 404 on every zeroheight host probed 2026-08-28.'
+  - id: idempotency-key
+    name: Idempotency-Key header
+    conforms: false
+    evidence:
+      - No idempotency key mechanism is published. The single write operation is a state assignment, so a retry is harmless by surface shape rather than by contract.
+  - id: pagination
+    name: Documented pagination
+    conforms: false
+    evidence:
+      - No pagination parameters are documented on any collection route, and the routes are 401-gated so none could be observed.
+  - id: rate-limit-headers
+    name: Rate-limit response headers
+    conforms: true
+    evidence:
+      - 'X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset are documented in zeroheight''s public Postman collection. Retry-After is not used.'
+  - id: mcp
+    name: Model Context Protocol
+    conforms: true
+    evidence:
+      - 'Hosted remote server at https://mcp.zeroheight.com/mcp - live, streamable-HTTP transport, returns 401 invalid_token to an unauthenticated tools/list (probed 2026-08-28).'
+      - 'Local stdio server published as @zeroheight/mcp-server 2.10.2 on npm.'
+      - 'Exposes MCP resources as well as tools - zeroheight://editor-instructions.'
+      - 'No legacy SSE transport - /sse returns a JSON-RPC -32601.'
+  - id: a2a
+    name: A2A Agent Card
+    conforms: false
+    evidence:
+      - '/.well-known/agent-card.json and /.well-known/agent.json return 404 on zeroheight.com, developers.zeroheight.com, help.zeroheight.com; 403 on api.zeroheight.com. Probed 2026-08-28.'
+  - id: llmstxt
+    name: llms.txt
+    conforms: false
+    evidence:
+      - '/llms.txt returns 404 on zeroheight.com, developers.zeroheight.com and help.zeroheight.com. Probed 2026-08-28.'
+domain_standards:
+  market: design systems / design tokens
+  note: >-
+    This is where zeroheight's standards posture is strong, and it is invisible to any generic API
+    rubric. A buyer who already speaks W3C design tokens or Style Dictionary integrates zeroheight
+    with no bespoke connector.
+  standards:
+    - id: w3c-design-tokens
+      name: W3C Design Tokens Community Group format (DTCG)
+      conforms: true
+      evidence:
+        - 'zeroheight token sets can be downloaded as JSON "in the W3C format, which can be useful for transferring to other tools" - https://help.zeroheight.com/hc/en-us/articles/35887016596123-Exporting-and-integrating-design-tokens-into-developer-pipelines'
+        - Figma-variable-derived token sets export as a zip of one file per collection, in the same format.
+      note: Export/import format, not a REST content type. The REST surface exposes token SETS (GET /token_sets) but the standardised payload is delivered through the per-set export URL.
+    - id: style-dictionary
+      name: Amazon Style Dictionary
+      conforms: true
+      version: v5
+      evidence:
+        - "zeroheight's token export is built on Style Dictionary - \"zeroheight's token export uses Style Dictionary, a powerful build system to transform tokens into different formats\"."
+        - Each token set gets a stable public or private Style Dictionary export URL usable directly as a build-pipeline endpoint; private URLs authenticate with the same Client ID and Access Token headers as the REST API.
+        - 'Migration guidance published for Style Dictionary v5 - https://help.zeroheight.com/hc/en-us/articles/48049028236187-Migrating-to-Style-Dictionary-v5-in-tokens-automation'
+      limitation: Composite tokens are not supported when exporting to platform-specific formats.
+    - id: tokens-studio
+      name: Tokens Studio format
+      conforms: true
+      evidence:
+        - 'Documented import path - https://help.zeroheight.com/hc/en-us/articles/35887040552987-Importing-from-Tokens-Studio'
+compliance:
+  certifications:
+    - SOC 2
+    - ISO 27001
+  trust_center: https://trust.zeroheight.com/
+  source: security/zeroheight-trust-center.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

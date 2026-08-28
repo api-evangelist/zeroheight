@@ -1,0 +1,53 @@
+specification: API Commons Scopes
+specificationVersion: '0.1'
+provider: Zeroheight
+providerId: zeroheight
+generated: '2026-08-28'
+method: searched
+source: https://help.zeroheight.com/hc/en-us/articles/35887043412251-Zeroheight-API-Authentication-token-creation
+docs: https://help.zeroheight.com/hc/en-us/articles/35887043412251-Zeroheight-API-Authentication-token-creation
+description: >-
+  zeroheight's REST API is key-authenticated, not OAuth, so there is no OAuth scope registry to
+  derive. What zeroheight does publish is a token-scoping model: every token is created against a
+  pre-defined "use case" that fixes its scope set, with an access level of Read or Read and write,
+  and Enterprise customers can additionally pick granular CLI scopes. The named use cases below are
+  the closest thing zeroheight publishes to a scope reference; the individual granular scope strings
+  are only shown inside the Enterprise token-creation UI and are not published, so they are recorded
+  as unknown rather than guessed.
+model: use-case-scoped API keys (no OAuth scopes on the REST surface)
+access_levels:
+  - id: read
+    description: Read-only access to the resources covered by the token's use case.
+  - id: read-write
+    description: Required for any action that changes content in zeroheight, e.g. Zapier "Update Page Status".
+scopes:
+  - id: measure-adoption
+    name: Measure Adoption
+    type: use-case
+    description: Authenticates @zeroheight/adoption-cli to monitor package versions and track component usage.
+    docs: https://help.zeroheight.com/hc/en-us/articles/35887094424347-Using-the-Adoption-CLI-as-part-a-CI-pipeline
+  - id: zapier
+    name: Zapier
+    type: use-case
+    description: Authenticates Zapier to run automation workflows against page statuses and styleguide releases.
+    docs: https://help.zeroheight.com/hc/en-us/articles/35887062307355-Automate-zeroheight-with-Zapier
+  - id: style-dictionary-exports
+    name: Style Dictionary Exports
+    type: use-case
+    description: Authenticates requests to private design-token export URLs.
+    docs: https://help.zeroheight.com/hc/en-us/articles/35887016596123-Exporting-and-integrating-design-tokens-into-developer-pipelines
+granular_scopes:
+  available: true
+  plans: Enterprise only
+  description: Specific CLI scopes selectable at token creation for precise control over access levels.
+  enumerated: false
+  note: The scope identifiers are not published anywhere zeroheight makes public; they are shown only in the Enterprise token-creation form. Not guessed here.
+mcp_scopes:
+  model: role-derived, not scope-string based
+  note: >-
+    Over MCP, capability follows the signed-in user's zeroheight role rather than a scope claim.
+    Admins/editors connected via MCP via login get the closed-beta write tools; SSO viewers, MCP via
+    link and local MCP connections are read-only.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

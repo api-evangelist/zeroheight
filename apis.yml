@@ -9,6 +9,17 @@ description: 'zeroheight is a design system platform where teams document compon
   design system directly. Design tokens export in W3C DTCG format and through stable per-set Style Dictionary
   URLs usable as build-pipeline endpoints.'
 type: Index
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: unknown

@@ -39,6 +39,17 @@ tags:
 - Design Systems
 - Design Tokens
 - Documentation
+- MCP
+- Agent Readiness
+- Developer Tools
+- Design
+- Figma
+- Storybook
+- Design Operations
+tags_raw:
+- Design Systems
+- Design Tokens
+- Documentation
 - Model Context Protocol
 - Agent Readiness
 - Developer Tools
@@ -60,6 +71,13 @@ apis:
     key. API access is an Enterprise-plan feature.'
   humanURL: https://developers.zeroheight.com/
   tags:
+  - Design System
+  - Design Tokens
+  - Documentation
+  - REST
+  - Style Guides
+  - Pages
+  tags_raw:
   - Design System
   - Design Tokens
   - Documentation
@@ -110,6 +128,11 @@ apis:
   humanURL: https://help.zeroheight.com/hc/en-us/articles/48004395674011-zeroheight-MCP-overview
   baseURL: https://mcp.zeroheight.com/mcp
   tags:
+  - MCP
+  - Agents
+  - Design Systems
+  - Artificial Intelligence
+  tags_raw:
   - Model Context Protocol
   - Agents
   - Design Systems

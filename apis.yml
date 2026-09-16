@@ -58,64 +58,10 @@ tags_raw:
 - Storybook
 - Design Operations
 created: '2025-01-07'
-modified: '2026-08-28'
+modified: '2026-09-16'
 url: https://raw.githubusercontent.com/api-evangelist/zeroheight/refs/heads/main/apis.yml
 specificationVersion: '0.23'
 apis:
-- aid: zeroheight:zeroheight
-  name: Zeroheight API
-  description: 'The zeroheight REST API automates design system workflows: read styleguides, their categories,
-    pages and page content (Markdown available via ?format=markdown), read published styleguide versions
-    and design token sets, and write page status tags. Authentication is a paired Client ID and Access
-    Token sent as the X-API-CLIENT and X-API-KEY headers. Rate limited to 30 requests per 30 seconds per
-    key. API access is an Enterprise-plan feature.'
-  humanURL: https://developers.zeroheight.com/
-  tags:
-  - Design System
-  - Design Tokens
-  - Documentation
-  - REST
-  - Style Guides
-  - Pages
-  tags_raw:
-  - Design System
-  - Design Tokens
-  - Documentation
-  - REST
-  - Styleguides
-  - Pages
-  properties:
-  - type: OpenAPI
-    url: openapi/zeroheight-open-api-v2.yml
-  - type: Overlay
-    url: overlays/zeroheight-open-api-v2-overlay.yaml
-  - type: Documentation
-    url: https://developers.zeroheight.com/
-  - type: APIReference
-    url: https://developers.zeroheight.com/75fe5b2ed/p/02b002
-  - type: GettingStarted
-    url: https://developers.zeroheight.com/75fe5b2ed/p/877703-getting-started
-  - type: Guide
-    url: https://zeroheight.com/help/api/
-  - type: Postman
-    url: https://www.postman.com/zeroheight-0379/zeroheight/overview
-  - type: Authentication
-    url: authentication/zeroheight-authentication.yml
-  - type: OAuthScopes
-    url: scopes/zeroheight-scopes.yml
-  - type: ErrorCatalog
-    url: errors/zeroheight-problem-types.yml
-  - type: RateLimits
-    url: rate-limits/zeroheight-rate-limits.yml
-  - type: Conventions
-    url: conventions/zeroheight-conventions.yml
-  - type: DataModel
-    url: data-model/zeroheight-data-model.yml
-  - type: Conformance
-    url: conformance/zeroheight-conformance.yml
-  - type: Lifecycle
-    url: lifecycle/zeroheight-lifecycle.yml
-  baseURL: https://zeroheight.com/open_api/v2
 - aid: zeroheight:zeroheight-mcp
   name: zeroheight MCP
   description: The zeroheight Model Context Protocol server. Gives AI tools read access to a team's design
@@ -146,6 +92,116 @@ apis:
     url: https://help.zeroheight.com/hc/en-us/articles/51478956166939-zeroheight-MCP-tools-reference
   - type: GettingStarted
     url: https://help.zeroheight.com/hc/en-us/articles/43780251357979-Using-the-remote-zeroheight-MCP-server
+- aid: zeroheight:zeroheight-pages-api
+  name: Zeroheight Pages API
+  description: Individual documentation pages inside a styleguide, including their content and status
+    tag.
+  humanURL: https://developers.zeroheight.com/
+  baseURL: https://zeroheight.com/open_api/v2
+  tags:
+  - Pages
+  properties:
+  - type: OpenAPI
+    url: openapi/zeroheight-pages-api-openapi.yml
+  - type: Documentation
+    url: https://developers.zeroheight.com/
+  - type: APIReference
+    url: https://developers.zeroheight.com/75fe5b2ed/p/02b002
+  - type: GettingStarted
+    url: https://developers.zeroheight.com/75fe5b2ed/p/877703-getting-started
+  - type: Guide
+    url: https://zeroheight.com/help/api/
+  - type: Postman
+    url: https://www.postman.com/zeroheight-0379/zeroheight/overview
+  - type: Authentication
+    url: authentication/zeroheight-authentication.yml
+  - type: OAuthScopes
+    url: scopes/zeroheight-scopes.yml
+  - type: ErrorCatalog
+    url: errors/zeroheight-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/zeroheight-rate-limits.yml
+  - type: Conventions
+    url: conventions/zeroheight-conventions.yml
+  - type: DataModel
+    url: data-model/zeroheight-data-model.yml
+  - type: Conformance
+    url: conformance/zeroheight-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/zeroheight-lifecycle.yml
+- aid: zeroheight:zeroheight-styleguides-api
+  name: Zeroheight Styleguides API
+  description: Design systems documented in zeroheight. A styleguide is the top-level container for pages,
+    categories and versions.
+  humanURL: https://developers.zeroheight.com/
+  baseURL: https://zeroheight.com/open_api/v2
+  tags:
+  - Styleguides
+  properties:
+  - type: OpenAPI
+    url: openapi/zeroheight-styleguides-api-openapi.yml
+  - type: Documentation
+    url: https://developers.zeroheight.com/
+  - type: APIReference
+    url: https://developers.zeroheight.com/75fe5b2ed/p/02b002
+  - type: GettingStarted
+    url: https://developers.zeroheight.com/75fe5b2ed/p/877703-getting-started
+  - type: Guide
+    url: https://zeroheight.com/help/api/
+  - type: Postman
+    url: https://www.postman.com/zeroheight-0379/zeroheight/overview
+  - type: Authentication
+    url: authentication/zeroheight-authentication.yml
+  - type: OAuthScopes
+    url: scopes/zeroheight-scopes.yml
+  - type: ErrorCatalog
+    url: errors/zeroheight-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/zeroheight-rate-limits.yml
+  - type: Conventions
+    url: conventions/zeroheight-conventions.yml
+  - type: DataModel
+    url: data-model/zeroheight-data-model.yml
+  - type: Conformance
+    url: conformance/zeroheight-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/zeroheight-lifecycle.yml
+- aid: zeroheight:zeroheight-tokens-api
+  name: Zeroheight Tokens API
+  description: Design token sets managed in the zeroheight token manager.
+  humanURL: https://developers.zeroheight.com/
+  baseURL: https://zeroheight.com/open_api/v2
+  tags:
+  - Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/zeroheight-tokens-api-openapi.yml
+  - type: Documentation
+    url: https://developers.zeroheight.com/
+  - type: APIReference
+    url: https://developers.zeroheight.com/75fe5b2ed/p/02b002
+  - type: GettingStarted
+    url: https://developers.zeroheight.com/75fe5b2ed/p/877703-getting-started
+  - type: Guide
+    url: https://zeroheight.com/help/api/
+  - type: Postman
+    url: https://www.postman.com/zeroheight-0379/zeroheight/overview
+  - type: Authentication
+    url: authentication/zeroheight-authentication.yml
+  - type: OAuthScopes
+    url: scopes/zeroheight-scopes.yml
+  - type: ErrorCatalog
+    url: errors/zeroheight-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/zeroheight-rate-limits.yml
+  - type: Conventions
+    url: conventions/zeroheight-conventions.yml
+  - type: DataModel
+    url: data-model/zeroheight-data-model.yml
+  - type: Conformance
+    url: conformance/zeroheight-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/zeroheight-lifecycle.yml
 common:
 - type: TrustCenter
   url: security/zeroheight-trust-center.yml
@@ -239,7 +295,7 @@ common:
   url: overlays/zeroheight-open-api-v2-overlay.yaml
   name: API Evangelist enhancements overlay
 - type: OpenAPI
-  url: openapi/zeroheight-open-api-v2.yml
+  url: openapi/_original/zeroheight-open-api-v2.yml
   name: Derived OpenAPI 3.1 for the zeroheight REST API
 - type: Postman
   url: https://www.postman.com/zeroheight-0379/zeroheight/overview

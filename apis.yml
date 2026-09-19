@@ -136,6 +136,8 @@ apis:
   humanURL: https://developers.zeroheight.com/
   baseURL: https://zeroheight.com/open_api/v2
   tags:
+  - Style Guides
+  tags_raw:
   - Styleguides
   properties:
   - type: OpenAPI

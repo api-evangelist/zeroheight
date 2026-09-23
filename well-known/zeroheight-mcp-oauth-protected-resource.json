@@ -1,0 +1,1 @@
+{"resource":"https://mcp.zeroheight.com/mcp","authorization_servers":["https://auth.zeroheight.com/mcp"],"scopes_supported":["styleguide:read","page:read","page:write","styleguide:search","styleguide:list","styleguide_version:read"],"resource_name":"zeroheight MCP Server"}

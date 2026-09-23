@@ -1,0 +1,263 @@
+openapi: 3.2.0
+info:
+  title: zeroheight Pages API
+  version: v2
+  summary: The zeroheight public REST API for design system styleguides, pages, page statuses and token sets.
+  description: The zeroheight REST API can be used to automate your design system workflow, make use of your content in new ways and leverage external tools to empower your design system.
+  contact:
+    name: zeroheight Support
+    url: https://help.zeroheight.com/
+    email: support@zeroheight.com
+  termsOfService: https://terms.zeroheight.com/18bfef5dc/p/24f1a8-website-terms
+  x-provenance:
+    method: derived
+    generated: '2026-08-28'
+    derived-by: API Evangelist enrichment pipeline (pipeline-enrich.md STEP 0b)
+    sources:
+    - https://www.postman.com/zeroheight-0379/zeroheight/overview
+    - postman/zeroheight-api.postman_collection.json
+    - https://help.zeroheight.com/hc/en-us/articles/35887050539035
+    - https://developers.zeroheight.com/
+    - live 401/404 route probes of https://zeroheight.com/open_api/v2 on 2026-08-28
+    not-published-by-provider: true
+servers:
+- url: https://zeroheight.com/open_api/v2
+  description: zeroheight public API v2 (production)
+security:
+- apiClient: []
+  apiKey: []
+tags:
+- name: Pages
+  description: Individual documentation pages inside a styleguide, including their content and status tag.
+paths:
+  /styleguides/{styleguide_id}/pages:
+    parameters:
+    - $ref: '#/components/parameters/StyleguideId'
+    get:
+      operationId: listStyleguidePages
+      summary: List the pages in a styleguide
+      description: Returns the pages belonging to a styleguide. Used by zeroheight's own page-status and release tutorials.
+      tags:
+      - Pages
+      responses:
+        '200':
+          description: The pages in the styleguide.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /pages:
+    get:
+      operationId: listPages
+      summary: List pages
+      description: Lists pages readable by the authenticated token across the styleguides it can access.
+      tags:
+      - Pages
+      responses:
+        '200':
+          description: A list of pages.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /pages/{page_id}:
+    parameters:
+    - $ref: '#/components/parameters/PageId'
+    get:
+      operationId: getPage
+      summary: Get a page
+      description: Returns information about an individual page, including the content. Documented verbatim in zeroheight's public Postman collection, which also ships a saved "Markdown format" example using ?format=markdown.
+      tags:
+      - Pages
+      parameters:
+      - name: format
+        in: query
+        required: false
+        description: Response format for the page content. zeroheight's own Postman example uses `markdown`.
+        schema:
+          type: string
+          examples:
+          - markdown
+      responses:
+        '200':
+          description: The page, including its content.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /pages/{page_id}/status:
+    parameters:
+    - $ref: '#/components/parameters/PageId'
+    get:
+      operationId: getPageStatus
+      summary: Get a page status
+      description: Returns the current status tag on a page (for example New, Ready, In progress, To do, Deprecated).
+      tags:
+      - Pages
+      responses:
+        '200':
+          description: The page's current status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    patch:
+      operationId: updatePageStatus
+      summary: Update a page status
+      description: Updates the status tag on a page — the API's only write operation. zeroheight's REST API overview names PATCH on a page status as the canonical write example. The request body shape is not published by zeroheight and is therefore left open rather than invented.
+      tags:
+      - Pages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Page status update payload. Shape not published by zeroheight; requires an authenticated call to observe.
+      responses:
+        '200':
+          description: The updated page status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  parameters:
+    StyleguideId:
+      name: styleguide_id
+      in: path
+      required: true
+      description: The styleguide identifier.
+      schema:
+        type: string
+    PageId:
+      name: page_id
+      in: path
+      required: true
+      description: The page identifier.
+      schema:
+        type: string
+  schemas:
+    ErrorEnvelope:
+      type: object
+      description: Observed verbatim on unauthenticated probes of the live API on 2026-08-28. Every error carries a `request_id` suitable for support correlation.
+      required:
+      - status
+      - message
+      properties:
+        status:
+          type: string
+          description: '`fail` for client authentication/validation failures, `error` for routing and server failures.'
+          examples:
+          - fail
+          - error
+        message:
+          type: string
+          examples:
+          - Unauthorized
+          - Not Found
+        data:
+          type: object
+          properties:
+            request_id:
+              type: string
+              description: Correlation identifier for the request, echoed on every error.
+              examples:
+              - f9510eb94423d255c30947c718bf58e0
+    SuccessEnvelope:
+      type: object
+      description: zeroheight wraps responses in a status/data envelope. The `data` payload shape is behind authentication and is not published, so it is intentionally unconstrained here.
+      properties:
+        status:
+          type: string
+          examples:
+          - success
+        data:
+          type: object
+  responses:
+    Unauthorized:
+      description: The Client ID or Access Token is missing, malformed or invalid. Observed live as `{"status":"fail","message":"Unauthorized","data":{"request_id":"..."}}`.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+          examples:
+            observed:
+              summary: Live unauthenticated response
+              value:
+                status: fail
+                message: Unauthorized
+                data:
+                  request_id: f9510eb94423d255c30947c718bf58e0
+    NotFound:
+      description: The path is not routed, or the referenced resource does not exist. Observed live as `{"status":"error","message":"Not Found","data":{"request_id":"..."}}`.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+          examples:
+            observed:
+              summary: Live response for an unrouted path
+              value:
+                status: error
+                message: Not Found
+                data:
+                  request_id: 7f86f819024dc13e2fa52484928fb481
+    TooManyRequests:
+      description: The per-API-key rate limit has been exceeded. zeroheight publishes a limit of 30 requests per 30 seconds per API key and returns X-RateLimit-* headers on every response.
+      headers:
+        X-RateLimit-Limit:
+          description: The maximum number of requests the consumer is permitted to make per minute.
+          schema:
+            type: integer
+        X-RateLimit-Remaining:
+          description: The number of requests remaining in the current rate limit window.
+          schema:
+            type: integer
+        X-RateLimit-Reset:
+          description: The time at which the current rate limit window resets, in UTC epoch seconds.
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+  securitySchemes:
+    apiClient:
+      type: apiKey
+      in: header
+      name: X-API-CLIENT
+      description: The Client ID generated in the Developers section of zeroheight organization or workspace settings. Client IDs are prefixed `zhci_`.
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: The Access Token generated alongside the Client ID. Shown once only, treated like a password. Access tokens are prefixed `zhat_`.

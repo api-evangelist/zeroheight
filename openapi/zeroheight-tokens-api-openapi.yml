@@ -1,0 +1,133 @@
+openapi: 3.2.0
+info:
+  title: zeroheight Tokens API
+  version: v2
+  summary: The zeroheight public REST API for design system styleguides, pages, page statuses and token sets.
+  description: The zeroheight REST API can be used to automate your design system workflow, make use of your content in new ways and leverage external tools to empower your design system.
+  contact:
+    name: zeroheight Support
+    url: https://help.zeroheight.com/
+    email: support@zeroheight.com
+  termsOfService: https://terms.zeroheight.com/18bfef5dc/p/24f1a8-website-terms
+  x-provenance:
+    method: derived
+    generated: '2026-08-28'
+    derived-by: API Evangelist enrichment pipeline (pipeline-enrich.md STEP 0b)
+    sources:
+    - https://www.postman.com/zeroheight-0379/zeroheight/overview
+    - postman/zeroheight-api.postman_collection.json
+    - https://help.zeroheight.com/hc/en-us/articles/35887050539035
+    - https://developers.zeroheight.com/
+    - live 401/404 route probes of https://zeroheight.com/open_api/v2 on 2026-08-28
+    not-published-by-provider: true
+servers:
+- url: https://zeroheight.com/open_api/v2
+  description: zeroheight public API v2 (production)
+security:
+- apiClient: []
+  apiKey: []
+tags:
+- name: Tokens
+  description: Design token sets managed in the zeroheight token manager.
+paths:
+  /token_sets:
+    get:
+      operationId: listTokenSets
+      summary: List design token sets
+      description: Lists the design token sets in the account. zeroheight's token manager also issues per-set Style Dictionary export URLs (public or private); private export URLs authenticate with the same Client ID and Access Token headers.
+      tags:
+      - Tokens
+      responses:
+        '200':
+          description: The account's design token sets.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    ErrorEnvelope:
+      type: object
+      description: Observed verbatim on unauthenticated probes of the live API on 2026-08-28. Every error carries a `request_id` suitable for support correlation.
+      required:
+      - status
+      - message
+      properties:
+        status:
+          type: string
+          description: '`fail` for client authentication/validation failures, `error` for routing and server failures.'
+          examples:
+          - fail
+          - error
+        message:
+          type: string
+          examples:
+          - Unauthorized
+          - Not Found
+        data:
+          type: object
+          properties:
+            request_id:
+              type: string
+              description: Correlation identifier for the request, echoed on every error.
+              examples:
+              - f9510eb94423d255c30947c718bf58e0
+    SuccessEnvelope:
+      type: object
+      description: zeroheight wraps responses in a status/data envelope. The `data` payload shape is behind authentication and is not published, so it is intentionally unconstrained here.
+      properties:
+        status:
+          type: string
+          examples:
+          - success
+        data:
+          type: object
+  responses:
+    Unauthorized:
+      description: The Client ID or Access Token is missing, malformed or invalid. Observed live as `{"status":"fail","message":"Unauthorized","data":{"request_id":"..."}}`.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+          examples:
+            observed:
+              summary: Live unauthenticated response
+              value:
+                status: fail
+                message: Unauthorized
+                data:
+                  request_id: f9510eb94423d255c30947c718bf58e0
+    TooManyRequests:
+      description: The per-API-key rate limit has been exceeded. zeroheight publishes a limit of 30 requests per 30 seconds per API key and returns X-RateLimit-* headers on every response.
+      headers:
+        X-RateLimit-Limit:
+          description: The maximum number of requests the consumer is permitted to make per minute.
+          schema:
+            type: integer
+        X-RateLimit-Remaining:
+          description: The number of requests remaining in the current rate limit window.
+          schema:
+            type: integer
+        X-RateLimit-Reset:
+          description: The time at which the current rate limit window resets, in UTC epoch seconds.
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+  securitySchemes:
+    apiClient:
+      type: apiKey
+      in: header
+      name: X-API-CLIENT
+      description: The Client ID generated in the Developers section of zeroheight organization or workspace settings. Client IDs are prefixed `zhci_`.
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: The Access Token generated alongside the Client ID. Shown once only, treated like a password. Access tokens are prefixed `zhat_`.

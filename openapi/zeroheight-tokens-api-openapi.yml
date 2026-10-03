@@ -50,6 +50,20 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   responses:
+    Unauthorized:
+      description: The Client ID or Access Token is missing, malformed or invalid. Observed live as `{"status":"fail","message":"Unauthorized","data":{"request_id":"..."}}`.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+          examples:
+            observed:
+              summary: Live unauthenticated response
+              value:
+                status: fail
+                message: Unauthorized
+                data:
+                  request_id: f9510eb94423d255c30947c718bf58e0
     TooManyRequests:
       description: The per-API-key rate limit has been exceeded. zeroheight publishes a limit of 30 requests per 30 seconds per API key and returns X-RateLimit-* headers on every response.
       headers:
@@ -69,31 +83,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorEnvelope'
-    Unauthorized:
-      description: The Client ID or Access Token is missing, malformed or invalid. Observed live as `{"status":"fail","message":"Unauthorized","data":{"request_id":"..."}}`.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
-          examples:
-            observed:
-              summary: Live unauthenticated response
-              value:
-                status: fail
-                message: Unauthorized
-                data:
-                  request_id: f9510eb94423d255c30947c718bf58e0
   schemas:
-    SuccessEnvelope:
-      type: object
-      description: zeroheight wraps responses in a status/data envelope. The `data` payload shape is behind authentication and is not published, so it is intentionally unconstrained here.
-      properties:
-        status:
-          type: string
-          examples:
-          - success
-        data:
-          type: object
     ErrorEnvelope:
       type: object
       description: Observed verbatim on unauthenticated probes of the live API on 2026-08-28. Every error carries a `request_id` suitable for support correlation.
@@ -120,6 +110,16 @@ components:
               description: Correlation identifier for the request, echoed on every error.
               examples:
               - f9510eb94423d255c30947c718bf58e0
+    SuccessEnvelope:
+      type: object
+      description: zeroheight wraps responses in a status/data envelope. The `data` payload shape is behind authentication and is not published, so it is intentionally unconstrained here.
+      properties:
+        status:
+          type: string
+          examples:
+          - success
+        data:
+          type: object
   securitySchemes:
     apiClient:
       type: apiKey

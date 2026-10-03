@@ -163,14 +163,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorEnvelope'
-  parameters:
-    StyleguideId:
-      name: styleguide_id
-      in: path
-      required: true
-      description: The styleguide identifier.
-      schema:
-        type: string
   schemas:
     SuccessEnvelope:
       type: object
@@ -208,6 +200,14 @@ components:
               description: Correlation identifier for the request, echoed on every error.
               examples:
               - f9510eb94423d255c30947c718bf58e0
+  parameters:
+    StyleguideId:
+      name: styleguide_id
+      in: path
+      required: true
+      description: The styleguide identifier.
+      schema:
+        type: string
   securitySchemes:
     apiClient:
       type: apiKey

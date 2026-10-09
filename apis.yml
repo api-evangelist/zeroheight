@@ -205,6 +205,8 @@ apis:
   - type: Lifecycle
     url: lifecycle/zeroheight-lifecycle.yml
 common:
+- type: FinOps
+  url: finops/zeroheight-finops.yml
 - type: TrustCenter
   url: security/zeroheight-trust-center.yml
 - type: DomainSecurity

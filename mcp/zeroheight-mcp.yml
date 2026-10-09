@@ -162,3 +162,22 @@ security_notes:
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
+rfc9728:
+  endpoint: https://mcp.zeroheight.com/mcp
+  metadata_url: https://mcp.zeroheight.com/.well-known/oauth-protected-resource/mcp
+  discovered_via: WWW-Authenticate resource_metadata on an anonymous POST initialize
+  fetched: '2026-09-25'
+  http_status: 200
+  content_type: application/json
+  document:
+    resource: https://mcp.zeroheight.com/mcp
+    authorization_servers:
+    - https://auth.zeroheight.com/mcp
+    scopes_supported:
+    - styleguide:read
+    - page:read
+    - page:write
+    - styleguide:search
+    - styleguide:list
+    - styleguide_version:read
+    resource_name: zeroheight MCP Server

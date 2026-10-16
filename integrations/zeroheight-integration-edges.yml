@@ -14,7 +14,7 @@ edges:
     registered_name: com.zeroheight/zeroheight
     register_id: com.zeroheight/zeroheight
     detected_by: sweep-agent-tools.py
-    detected: '2026-10-14'
+    detected: '2026-10-15'
   mcp_registry:
     servers:
     - com.zeroheight/zeroheight

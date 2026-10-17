@@ -167,20 +167,6 @@ components:
                 message: Unauthorized
                 data:
                   request_id: f9510eb94423d255c30947c718bf58e0
-    NotFound:
-      description: The path is not routed, or the referenced resource does not exist. Observed live as `{"status":"error","message":"Not Found","data":{"request_id":"..."}}`.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
-          examples:
-            observed:
-              summary: Live response for an unrouted path
-              value:
-                status: error
-                message: Not Found
-                data:
-                  request_id: 7f86f819024dc13e2fa52484928fb481
     TooManyRequests:
       description: The per-API-key rate limit has been exceeded. zeroheight publishes a limit of 30 requests per 30 seconds per API key and returns X-RateLimit-* headers on every response.
       headers:
@@ -200,6 +186,20 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorEnvelope'
+    NotFound:
+      description: The path is not routed, or the referenced resource does not exist. Observed live as `{"status":"error","message":"Not Found","data":{"request_id":"..."}}`.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+          examples:
+            observed:
+              summary: Live response for an unrouted path
+              value:
+                status: error
+                message: Not Found
+                data:
+                  request_id: 7f86f819024dc13e2fa52484928fb481
   parameters:
     StyleguideId:
       name: styleguide_id

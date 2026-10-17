@@ -84,6 +84,16 @@ components:
                 data:
                   request_id: f9510eb94423d255c30947c718bf58e0
   schemas:
+    SuccessEnvelope:
+      type: object
+      description: zeroheight wraps responses in a status/data envelope. The `data` payload shape is behind authentication and is not published, so it is intentionally unconstrained here.
+      properties:
+        status:
+          type: string
+          examples:
+          - success
+        data:
+          type: object
     ErrorEnvelope:
       type: object
       description: Observed verbatim on unauthenticated probes of the live API on 2026-08-28. Every error carries a `request_id` suitable for support correlation.
@@ -110,16 +120,6 @@ components:
               description: Correlation identifier for the request, echoed on every error.
               examples:
               - f9510eb94423d255c30947c718bf58e0
-    SuccessEnvelope:
-      type: object
-      description: zeroheight wraps responses in a status/data envelope. The `data` payload shape is behind authentication and is not published, so it is intentionally unconstrained here.
-      properties:
-        status:
-          type: string
-          examples:
-          - success
-        data:
-          type: object
   securitySchemes:
     apiClient:
       type: apiKey

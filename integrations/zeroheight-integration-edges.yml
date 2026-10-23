@@ -144,6 +144,23 @@ edges:
   detected: '2026-10-22'
   detected_by: mirror-platform-listings.py
   category: Raycast Store extension (first-party)
+- partner_name: Adobe Creative Cloud (own)
+  partner: adobe-creative-cloud
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://exchange.adobe.com/apps/cc/be8a1b2e/zeroheight
+  mirror_of: adobe-creative-cloud/integrations/adobe-creative-cloud-integration-edges.yml
+  apps:
+  - zeroheight
+  listing_count: 1
+  detected: '2026-10-23'
+  detected_by: mirror-platform-listings.py
+  category: Adobe Exchange Creative Cloud listing (Express)
 generated: '2026-10-14'
 method: searched
 checked:
@@ -163,6 +180,7 @@ checked:
 - https://github.com/ScoopInstaller/Extras
 - https://github.com/ScoopInstaller/Main
 - raycast/integrations/raycast-integration-edges.yml
+- adobe-creative-cloud/integrations/adobe-creative-cloud-integration-edges.yml
 source:
 - microsoft-teams/integrations/microsoft-teams-integration-edges.yml
 - slack/integrations/slack-integration-edges.yml

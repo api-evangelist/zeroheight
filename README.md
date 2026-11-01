@@ -1,4 +1,4 @@
-# zeroheight (zeroheight)
+# Zeroheight
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,52 +64,144 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-The zeroheight REST API can be used to automate your design system workflow, make use of your content in new ways and, leverage external tools to empower your design system.  
+zeroheight is a design system platform where teams document components, patterns, guidelines and design tokens in a styleguide, then deliver that documentation to designers, engineers and AI agents. It exposes two machine surfaces: a small key-authenticated REST API (https://zeroheight.com/open_api/v2) covering styleguides, pages, page content, page statuses, versions, categories and token sets, and a substantially richer Model Context Protocol server, hosted at https://mcp.zeroheight.com/mcp and also shipped as the npm package @zeroheight/mcp-server, which lets a coding or prototyping agent read a team's design system directly. Design tokens export in W3C DTCG format and through stable per-set Style Dictionary URLs usable as build-pipeline endpoints.
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/zeroheight/refs/heads/main/apis.yml)
+**Areas:** Design Systems · Design Tokens · Documentation · MCP · Agent Readiness · Developer Tools · Design · Figma · Storybook · Design Operations
 
-## Scope
+## Zeroheight on APIs.io
 
-- **Type:** Index 
-- **Position:** Consuming 
-- **Access:** 3rd-Party 
+Everything profiled for Zeroheight is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/zeroheight/](https://apis.io/providers/zeroheight/)** — or go straight to one of the APIs or properties below.
 
-## Tags:
+### APIs (4)
 
- - API
+- [zeroheight MCP](https://apis.io/apis/zeroheight/zeroheight-mcp/) — The zeroheight Model Context Protocol server. Gives AI tools read access to a team's design system documentation - list styleguides, walk the navigation…
+- [Zeroheight Pages API](https://apis.io/apis/zeroheight/zeroheight-pages-api/) — Individual documentation pages inside a styleguide, including their content and status tag.
+- [Zeroheight Styleguides API](https://apis.io/apis/zeroheight/zeroheight-styleguides-api/) — Design systems documented in zeroheight. A styleguide is the top-level container for pages, categories and versions.
+- [Zeroheight Tokens API](https://apis.io/apis/zeroheight/zeroheight-tokens-api/) — Design token sets managed in the zeroheight token manager.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2025-01-07 
-- **Modified:** 2026-03-16 
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### MCP servers (1)
 
-### zeroheight API
-The zeroheight REST API can be used to automate your design system workflow, make use of your content in new ways and leverage external tools to empower your design system. It provides access to resources like pages and styleguides using standard HTTP verbs.
+Model Context Protocol servers that expose the API to agents.
 
-**Human URL:** [https://developers.zeroheight.com/](https://developers.zeroheight.com/)
+- [zeroheight MCP](https://apis.io/servers/zeroheight/zeroheight-mcp/)
 
+#### Collections (1)
 
-#### Tags:
+Postman and Open Collection request collections.
 
- - Design System, Documentation, REST
+- [zeroheight API](https://apis.io/collections/zeroheight/postman-zeroheight-api/)
 
-#### Properties
+#### Overlays (1)
 
-- [Documentation](https://developers.zeroheight.com/)
-- [Guide](https://zeroheight.com/help/api/)
+OpenAPI overlays, including conversational phrasing for each operation.
 
-## Common Properties
+- [Zeroheight Open Api V2 Overlay](https://apis.io/overlays/zeroheight/zeroheight-open-api-v2-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Zeroheight Authentication](https://apis.io/security/zeroheight/zeroheight-authentication/)
+- [Zeroheight Domain Security](https://apis.io/security/zeroheight/zeroheight-domain-security/)
+- [Zeroheight Trust Center](https://apis.io/security/zeroheight/zeroheight-trust-center/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Zeroheight Scopes](https://apis.io/scopes/zeroheight/zeroheight-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Zeroheight Plans Pricing](https://apis.io/plans/zeroheight/zeroheight-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Zeroheight Rate Limits](https://apis.io/rate-limits/zeroheight/zeroheight-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Zeroheight Finops](https://apis.io/finops/zeroheight/zeroheight-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://zeroheight.com/)
-- [Portal](https://developers.zeroheight.com/)
+- [Documentation](https://developers.zeroheight.com/)
+- [Getting started](https://developers.zeroheight.com/75fe5b2ed/p/877703-getting-started)
+- [API reference](https://developers.zeroheight.com/75fe5b2ed/p/02b002)
+- [Pricing](https://zeroheight.com/pricing/)
+- [Sign up](https://zeroheight.com/create/account)
 - [Support](https://help.zeroheight.com/)
-- [Integrations](https://zeroheight.com/integrations/)
+- [Changelog](https://zeroheight.com/whats-new/)
 - [Blog](https://zeroheight.com/blog/)
+- [Terms of service](https://terms.zeroheight.com/18bfef5dc/p/24f1a8-website-terms)
+- [Privacy policy](https://terms.zeroheight.com/18bfef5dc/p/28f2cf-privacy-and-cookie-policy)
+- [GitHub](https://github.com/zeroheight)
+- [Status](https://uptime.zeroheight.com/)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
+**Kin Score 54.8** — strong · rubric 0.25.0 · scored 2026-10-23
 
-**Email:** kin@apievangelist.com
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 14.3 |
+| Contract governance | 18.2 |
+| Operational transparency | 39.5 |
+| Developer ergonomics | 75.6 |
+| Access clarity | 92.1 |
+
+**Agent readiness 50.2** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | verified |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 39.2** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/zeroheight/](https://apis.io/providers/zeroheight/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Zeroheight: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/zeroheight/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).

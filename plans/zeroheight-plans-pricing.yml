@@ -1,0 +1,77 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-28'
+method: searched
+source: https://zeroheight.com/pricing/
+sources:
+- https://zeroheight.com/pricing/
+provenance:
+  tool: engine/economics/harvest_pricing.py
+  run: 20261028T141238
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: per-seat
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-28'
+  managed_tier: Starter
+published: true
+note: 'Pricing page with Free, Starter ($49 per editor/month, yearly saves 15%) and Enterprise (contact
+  sales). FAQ states first Starter purchase charges a minimum of 1x editor: $59 monthly or $588 yearly.'
+plan_count: 3
+currency: USD
+plans:
+- name: Free
+  price_text: $0
+  price: 0
+  currency: USD
+  period: month
+  unit: account
+  included_quota: 1 editor, 1 styleguide, 1 token set, MCP server (with Standard Search, 500 calls/month)
+- name: Starter
+  price_text: $49 per editor/month*
+  price: 49
+  currency: USD
+  period: month
+  unit: editor
+  included_quota: Up to 5 editors, 2 styleguides, 3 token sets, MCP server (with Standard Search, 500
+    calls/month); $0 for 14 days trial; save 15% paying yearly
+- name: Enterprise
+  price_text: Contact sales
+  period: none
+  included_quota: 5+ editors and reviewers, 5+ styleguides, 10 token sets, API, MCP server with Fast Search
+rate_limit_statements:
+- MCP server (with Standard Search, 500 calls/month)
+x-canonical:
+  generated: '2026-11-01'
+  vocabulary: engine/economics/plans-canonical.yml
+  models:
+  - metered
+  - seat
+  units:
+  - object
+  - seat
+  plans:
+  - name: Free
+    access: other
+    model: metered
+    model_how: derived
+    units:
+    - object
+    periods:
+    - month
+  - name: Starter
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Enterprise
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none

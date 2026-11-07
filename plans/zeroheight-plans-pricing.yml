@@ -43,7 +43,7 @@ plans:
 rate_limit_statements:
 - MCP server (with Standard Search, 500 calls/month)
 x-canonical:
-  generated: '2026-11-02'
+  generated: '2026-11-06'
   vocabulary: engine/economics/plans-canonical.yml
   models:
   - metered
